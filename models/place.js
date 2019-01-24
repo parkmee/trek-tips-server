@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const PlaceSchema = new Schema({
   yelpId: { type: String, required: true },
   name: { type: String, required: true },
-  image_url: { type: String },
+  /* image_url: { type: String },
   url: { type: String },
   price: { type: String },
   yelpRating: { type: Number },
@@ -24,7 +24,7 @@ const PlaceSchema = new Schema({
     state: { type: String },
     country: { type: String, required: true },
     display_address: { type: String }
-  },
+  }, */
   rating: [{ type: Schema.Types.ObjectId, ref: "Rating" }]
 });
 
