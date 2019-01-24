@@ -31,6 +31,13 @@ app.use(routes);
 /*const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/trek-tips';
 mongoose.connect(MONGODB_URI, {useNewUrlParser: true});*/
 
+// Seed Data ------------------------------------------------------------------
+const SeedData = require("./scripts/seedDB");
+const seed = new SeedData();
+// enable the methods below to reseed as needed
+// seed.seedYelpPlaces(); // dummy data
+// seed.seedYelpCategories(); // master list of all Yelp category items
+
 // launch server --------------------------------------------------------------
 app.listen(PORT, () => {
   console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`);

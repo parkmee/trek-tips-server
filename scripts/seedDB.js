@@ -15,57 +15,69 @@ const searchURL = `https://api.yelp.com/v3/businesses/search`;
 const categories = "desserts";
 const location = "atlanta, ga"
 
-// seed place data
-axios.get(searchURL, {
-  params: {
-    categories: categories,
-    location: location,
-    limit: 5
-  },
-  headers: {
-    'Authorization': `Bearer lC3zgwezYWCKbJZW03Yepl4A52o_fhrqd9a1x0_MapVxItu97aAHOUOGfsRzDJswOWzWlaHv0zvw8keaePumFEkXJWyOgcTcLg7ekQOQ9skybUd_wy02lE3hnQy0W3Yx`,
-    'Access-Control-Allow-Headers': 'Origin'
+class SeedData {
+  constructor() {
+    // leave blank
   }
-}).then(res => {
-  console.log(res.data.businesses);
-  const businesses = res.data.businesses;
 
-  db.Category
-    .remove({})
-    .then(() => db.Place.collection.insertMany(businesses))
-    .then(data => {
-      console.log(data.result.n + " records inserted!");
+  seedYelpPlaces() {
+    // seed place data
+    axios.get(searchURL, {
+      params: {
+        categories: categories,
+        location: location,
+        limit: 5
+      },
+      headers: {
+        'Authorization': `Bearer lC3zgwezYWCKbJZW03Yepl4A52o_fhrqd9a1x0_MapVxItu97aAHOUOGfsRzDJswOWzWlaHv0zvw8keaePumFEkXJWyOgcTcLg7ekQOQ9skybUd_wy02lE3hnQy0W3Yx`,
+        'Access-Control-Allow-Headers': 'Origin'
+      }
+    }).then(res => {
+      console.log(res.data.businesses);
+      const businesses = res.data.businesses;
+
+      db.Category
+        .remove({})
+        .then(() => db.Place.collection.insertMany(businesses))
+        .then(data => {
+          console.log(data.result.n + " records inserted!");
+        })
+        .catch(err => {
+          console.log(`Mongoose error: ${err}`);
+          process.exit(1);
+        });
     })
-    .catch(err => {
-      console.log(`Mongoose error: ${err}`);
-      process.exit(1);
-    });
-})
-  .catch(err => {
-    console.log(`API error: ${err}`);
-  });
-
-axios.get(categoriesURL, {
-  headers: {
-    'Authorization': `Bearer lC3zgwezYWCKbJZW03Yepl4A52o_fhrqd9a1x0_MapVxItu97aAHOUOGfsRzDJswOWzWlaHv0zvw8keaePumFEkXJWyOgcTcLg7ekQOQ9skybUd_wy02lE3hnQy0W3Yx`,
-    'Access-Control-Allow-Headers': 'Origin'
+      .catch(err => {
+        console.log(`API error: ${err}`);
+      });
   }
-}).then(res => {
-  console.log(res.data.categories);
-  const categories = res.data.categories;
 
-  db.Category
-    .remove({})
-    .then(() => db.Category.collection.insertMany(categories))
-    .then(data => {
-      console.log(data.result.n + " records inserted!");
-      process.exit(0);
+  seedYelpCategories() {
+    axios.get(categoriesURL, {
+      headers: {
+        'Authorization': `Bearer lC3zgwezYWCKbJZW03Yepl4A52o_fhrqd9a1x0_MapVxItu97aAHOUOGfsRzDJswOWzWlaHv0zvw8keaePumFEkXJWyOgcTcLg7ekQOQ9skybUd_wy02lE3hnQy0W3Yx`,
+        'Access-Control-Allow-Headers': 'Origin'
+      }
+    }).then(res => {
+      console.log(res.data.categories);
+      const categories = res.data.categories;
+
+      db.Category
+        .remove({})
+        .then(() => db.Category.collection.insertMany(categories))
+        .then(data => {
+          console.log(data.result.n + " records inserted!");
+          process.exit(0);
+        })
+        .catch(err => {
+          console.log(`Mongoose error: ${err}`);
+          process.exit(1);
+        });
     })
-    .catch(err => {
-      console.log(`Mongoose error: ${err}`);
-      process.exit(1);
-    });
-})
-  .catch(err => {
-    console.log(`API error: ${err}`);
-  });
+      .catch(err => {
+        console.log(`API error: ${err}`);
+      });
+  }
+}
+
+module.exports = SeedData;
