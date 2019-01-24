@@ -7,6 +7,7 @@ module.exports = {
       .then(user => {
         console.log(user.data);
         console.log(user.data.sub); // this is the value we will want to save with the users we create in our DB.
+        console.log(typeof user.data.sub);
         res.json(user.data)
       })
       .catch(err => console.log(err))
