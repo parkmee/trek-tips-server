@@ -2,10 +2,11 @@
   "name": "trek-tips",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js",
+    "start": "node server.js",
+    "watch": "nodemon server.js",
     "populate": "babel-cli/bin/babel-node.js populate.js"
   },
   "repository": {
