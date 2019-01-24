@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 mongoose.set('useCreateIndex', true);
 
 // connect to mongoose database
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/trek-tips';
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+/* const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/trek-tips';
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true }); */
 
 // Yelp endpoint URLs
 const searchURL = `https://api.yelp.com/v3/businesses/search`;
