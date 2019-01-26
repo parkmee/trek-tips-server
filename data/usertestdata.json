@@ -1,0 +1,41 @@
+[{
+    "firstName": "Avery",
+    "lastName": "Adams",
+    "username": "aadams",
+    "email": "aadams@email.com",
+    "preferences": [
+      "5c4c4ba58c01a16f38688be5",
+      "5c4c4ba58c01a16f38688be6"
+    ]
+  },
+  {
+    "firstName": "Bob",
+    "lastName": "Builder",
+    "username": "bbuilder",
+    "email": "bbuilder@email.com",
+    "preferences": [
+      "5c4c4ba58c01a16f38688beb",
+      "5c4c4ba58c01a16f38688bef"
+    ]
+  },
+  {
+    "firstName": "Carl",
+    "lastName": "Cole",
+    "username": "ccole",
+    "email": "ccole@email.com",
+    "preferences": [
+      "5c4c4ba58c01a16f38688be5",
+      "5c4c4ba58c01a16f38688be7"
+    ]
+  },
+  {
+    "firstName": "Donna",
+    "lastName": "Derry",
+    "username": "dderry",
+    "email": "dderry@email.com",
+    "preferences": [
+      "5c4c4ba58c01a16f38688be7",
+      "5c4c4ba58c01a16f38688c4b"
+    ]
+  }
+]

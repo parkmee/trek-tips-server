@@ -37,7 +37,7 @@ const seed = new SeedData();
 // enable the methods below to reseed as needed
 // seed.seedYelpPlaces(); // dummy data
 // seed.seedYelpCategories(); // master list of all Yelp category items
-// seed.seedUsers();
+seed.seedUsers();
 
 // launch server --------------------------------------------------------------
 app.listen(PORT, () => {

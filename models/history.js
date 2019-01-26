@@ -1,3 +1,5 @@
+// merged into user - delete when model is finalized
+
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 

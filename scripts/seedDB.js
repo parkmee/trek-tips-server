@@ -1,6 +1,8 @@
 const axios = require("axios");
 const mongoose = require("mongoose");
 const db = require("../models");
+const userArray = require("../data/usertestdata.json");
+const locationArray = require("../data/locationtestdata.json");
 mongoose.set('useCreateIndex', true);
 
 // connect to mongoose database
@@ -15,14 +17,7 @@ const searchURL = `https://api.yelp.com/v3/businesses/search`;
 const categories = "desserts";
 const location = "atlanta, ga"
 
-// seed data
-const userArray = [
-  { firstName: "Avery", lastName: "Adams", username: "aadams", email: "aadams@email.com" },
-  { firstName: "Bob", lastName: "Builder", username: "bbuilder", email: "bbuilder@email.com" },
-  { firstName: "Carl", lastName: "Cole", username: "ccole", email: "ccole@email.com" },
-  { firstName: "Donna", lastName: "Derry", username: "dderry", email: "dderry@email.com" }
-]
-
+// methods to seed data
 class SeedData {
   /* constructor() {
     // leave blank
