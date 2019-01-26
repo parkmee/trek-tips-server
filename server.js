@@ -8,7 +8,7 @@ mongoose.set('useCreateIndex', true);
 
 // Initialize http server -----------------------------------------------------
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 // Middleware -----------------------------------------------------------------
 app.use(logger('dev'));
@@ -37,6 +37,7 @@ const seed = new SeedData();
 // enable the methods below to reseed as needed
 // seed.seedYelpPlaces(); // dummy data
 // seed.seedYelpCategories(); // master list of all Yelp category items
+// seed.seedUsers();
 
 // launch server --------------------------------------------------------------
 app.listen(PORT, () => {

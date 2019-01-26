@@ -15,9 +15,25 @@ const searchURL = `https://api.yelp.com/v3/businesses/search`;
 const categories = "desserts";
 const location = "atlanta, ga"
 
+// seed data
+const userArray = [
+  { firstName: "Avery", lastName: "Adams", username: "aadams", email: "aadams@email.com" },
+  { firstName: "Bob", lastName: "Builder", username: "bbuilder", email: "bbuilder@email.com" },
+  { firstName: "Carl", lastName: "Cole", username: "ccole", email: "ccole@email.com" },
+  { firstName: "Donna", lastName: "Derry", username: "dderry", email: "dderry@email.com" }
+]
+
 class SeedData {
-  constructor() {
+  /* constructor() {
     // leave blank
+  } */
+
+  seedUsers() {
+    db.User
+      .remove({})
+      .then(() => db.User.collection.insertMany(userArray))
+      .then(data => { console.log(data.result.n + " records inserted!"); })
+      .catch(err => console.log(err));
   }
 
   seedYelpPlaces() {
