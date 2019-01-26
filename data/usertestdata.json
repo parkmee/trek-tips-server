@@ -8,7 +8,25 @@
       "5c4c4ba58c01a16f38688be6"
     ],
     "locations": [
-      "5c4c5c5e22885a3dddfee716"
+      { "location_id": "5c4c5c5e22885a3dddfee716",
+        "places": [
+          {
+            "place_id": "5c4c4a68e1440b27050c752c",
+            "isSaved": true,
+            "hasVisited": false
+          },
+          {
+            "place_id": "5c4c4a68e1440b27050c752d",
+            "isSaved": false,
+            "hasVisited": true
+          },
+          {
+            "place_id": "5c4c4a68e1440b27050c752e",
+            "isSaved": false,
+            "hasVisited": true
+          }
+        ]
+      }
     ]
   },
   {
