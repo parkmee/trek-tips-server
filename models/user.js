@@ -8,7 +8,7 @@ const Place = new Schema({
 })
 
 const Location = new Schema({
-  location_id: { type: Schema.Types.ObjectId, ref: "Location" },
+  locationSearchString: { type: String, required: true },
   places: [Place] 
 })
 
@@ -19,7 +19,7 @@ const UserSchema = new Schema({
   lastName: { type: String, required: true },
   username: { type: String, unique: true, required: true },
   email: { type: String, unique: true },
-  auth0: { type: String, unique: true },
+  auth0: { type: String },
   preferences: [{ type: Schema.Types.ObjectId, ref: "Category" }],
   locations: [Location],
 });

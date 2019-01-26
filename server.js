@@ -3,8 +3,23 @@ const express = require("express");
 const routes = require('./routes');
 const bodyParser = require("body-parser");
 const logger = require('morgan');
+const http = require("http");
+const fs = require("fs");
+
+// Connect to MongoDB Database ------------------------------------------------
 const mongoose = require("mongoose");
 mongoose.set('useCreateIndex', true);
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/trek-tips';
+mongoose.connect(MONGODB_URI, {useNewUrlParser: true});
+const db = mongoose.connection;
+
+db.on("error", mes => {
+  console.log("db connection failed");
+});
+
+db.once("open", () => {
+  console.log("db connected successfully");
+});
 
 // Initialize http server -----------------------------------------------------
 const app = express();
@@ -25,21 +40,17 @@ app.use(bodyParser.json());
   }); */
 
 // Routes ---------------------------------------------------------------------
-app.use(routes);
+app.use("/", routes);
 
-// Connect to MongoDB Database ------------------------------------------------
-/*const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/trek-tips';
-mongoose.connect(MONGODB_URI, {useNewUrlParser: true});*/
+
 
 // Seed Data ------------------------------------------------------------------
 const SeedData = require("./scripts/seedDB");
 const seed = new SeedData();
 // enable the methods below to reseed as needed
-// seed.seedYelpPlaces(); // dummy place data retrieved from Yelp
 // seed.seedYelpCategories(); // master list of all Yelp category items
+// seed.seedYelpPlaces(); // dummy place data retrieved from Yelp 
 // seed.seedUsers(); // dummy user data from json
-// seed.seedLocations();
-
 
 // launch server --------------------------------------------------------------
 app.listen(PORT, () => {

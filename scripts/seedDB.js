@@ -2,7 +2,6 @@ const axios = require("axios");
 const mongoose = require("mongoose");
 const db = require("../models");
 const userArray = require("../data/usertestdata.json");
-const locationArray = require("../data/locationtestdata.json");
 mongoose.set('useCreateIndex', true);
 
 // connect to mongoose database
@@ -14,8 +13,7 @@ const categoriesURL = `https://api.yelp.com/v3/categories`;
 
 // business search url and search parameters to seed places collection
 const searchURL = `https://api.yelp.com/v3/businesses/search`;
-const categories = "desserts";
-const location = "atlanta, ga"
+
 
 // methods to seed data
 class SeedData {
@@ -31,15 +29,10 @@ class SeedData {
       .catch(err => console.log(err));
   }
 
-  seedLocations() {
-    db.Location
-      .remove({})
-      .then(() => db.Location.collection.insertMany(locationArray))
-      .then(data => { console.log(data.result.n + " records inserted!"); })
-      .catch(err => console.log(err));
-  }
-
   seedYelpPlaces() {
+    const categories = "museums";
+    const location = "Philadelphia, PA";
+
     // seed place data
     axios.get(searchURL, {
       params: {
@@ -55,12 +48,8 @@ class SeedData {
       console.log(res.data.businesses);
       const businesses = res.data.businesses;
 
-      db.Category
-        .remove({})
-        .then(() => db.Place.collection.insertMany(businesses))
-        .then(data => {
-          console.log(data.result.n + " records inserted!");
-        })
+      db.Place.collection.insertMany(businesses)
+        .then(data => { console.log(data.result.n + " records inserted!"); })
         .catch(err => {
           console.log(`Mongoose error: ${err}`);
           process.exit(1);

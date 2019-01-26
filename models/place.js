@@ -25,7 +25,6 @@ const PlaceSchema = new Schema({
     country: { type: String, required: true },
     display_address: { type: String }
   }, */
-  rating: [{ type: Schema.Types.ObjectId, ref: "Rating" }]
 });
 
 const Place = mongoose.model("Place", PlaceSchema);

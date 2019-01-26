@@ -8,21 +8,36 @@
       "5c4c4ba58c01a16f38688be6"
     ],
     "locations": [
-      { "location_id": "5c4c5c5e22885a3dddfee716",
+      { "locationSearchString": "Atlanta, GA",
         "places": [
           {
-            "place_id": "5c4c4a68e1440b27050c752c",
+            "place_id": "5c4c9dece8545380749243f8",
             "isSaved": true,
             "hasVisited": false
           },
           {
-            "place_id": "5c4c4a68e1440b27050c752d",
+            "place_id": "5c4c9dece8545380749243fc",
             "isSaved": false,
             "hasVisited": true
           },
           {
-            "place_id": "5c4c4a68e1440b27050c752e",
+            "place_id": "5c4c9dece8545380749243fa",
             "isSaved": false,
+            "hasVisited": true
+          }
+        ]
+      },
+      {
+        "locationSearchString": "Philadelphia, PA",
+        "places": [
+          {
+            "place_id": "5c4ca0e754824398646b75e2",
+            "isSaved": false,
+            "hasVisited": true
+          },
+          {
+            "place_id": "5c4ca0e754824398646b75e1",
+            "isSaved": true,
             "hasVisited": true
           }
         ]
