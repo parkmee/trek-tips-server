@@ -31,6 +31,14 @@ class SeedData {
       .catch(err => console.log(err));
   }
 
+  seedLocations() {
+    db.Location
+      .remove({})
+      .then(() => db.Location.collection.insertMany(locationArray))
+      .then(data => { console.log(data.result.n + " records inserted!"); })
+      .catch(err => console.log(err));
+  }
+
   seedYelpPlaces() {
     // seed place data
     axios.get(searchURL, {

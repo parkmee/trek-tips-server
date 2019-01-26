@@ -35,9 +35,11 @@ mongoose.connect(MONGODB_URI, {useNewUrlParser: true});*/
 const SeedData = require("./scripts/seedDB");
 const seed = new SeedData();
 // enable the methods below to reseed as needed
-// seed.seedYelpPlaces(); // dummy data
+// seed.seedYelpPlaces(); // dummy place data retrieved from Yelp
 // seed.seedYelpCategories(); // master list of all Yelp category items
-seed.seedUsers();
+// seed.seedUsers(); // dummy user data from json
+// seed.seedLocations();
+
 
 // launch server --------------------------------------------------------------
 app.listen(PORT, () => {
