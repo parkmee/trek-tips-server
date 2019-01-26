@@ -1,0 +1,77 @@
+[{
+    "firstName": "Avery",
+    "lastName": "Adams",
+    "username": "aadams",
+    "email": "aadams@email.com",
+    "preferences": [
+      "5c4c4ba58c01a16f38688be5",
+      "5c4c4ba58c01a16f38688be6"
+    ],
+    "locations": [
+      { "locationSearchString": "Atlanta, GA",
+        "places": [
+          {
+            "place_id": "5c4c9dece8545380749243f8",
+            "isSaved": true,
+            "hasVisited": false
+          },
+          {
+            "place_id": "5c4c9dece8545380749243fc",
+            "isSaved": false,
+            "hasVisited": true
+          },
+          {
+            "place_id": "5c4c9dece8545380749243fa",
+            "isSaved": false,
+            "hasVisited": true
+          }
+        ]
+      },
+      {
+        "locationSearchString": "Philadelphia, PA",
+        "places": [
+          {
+            "place_id": "5c4ca0e754824398646b75e2",
+            "isSaved": false,
+            "hasVisited": true
+          },
+          {
+            "place_id": "5c4ca0e754824398646b75e1",
+            "isSaved": true,
+            "hasVisited": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "firstName": "Bob",
+    "lastName": "Builder",
+    "username": "bbuilder",
+    "email": "bbuilder@email.com",
+    "preferences": [
+      "5c4c4ba58c01a16f38688beb",
+      "5c4c4ba58c01a16f38688bef"
+    ]
+  },
+  {
+    "firstName": "Carl",
+    "lastName": "Cole",
+    "username": "ccole",
+    "email": "ccole@email.com",
+    "preferences": [
+      "5c4c4ba58c01a16f38688be5",
+      "5c4c4ba58c01a16f38688be7"
+    ]
+  },
+  {
+    "firstName": "Donna",
+    "lastName": "Derry",
+    "username": "dderry",
+    "email": "dderry@email.com",
+    "preferences": [
+      "5c4c4ba58c01a16f38688be7",
+      "5c4c4ba58c01a16f38688c4b"
+    ]
+  }
+]

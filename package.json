@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
+    "start": "nodemon server.js",
     "watch": "nodemon server.js",
     "populate": "babel-cli/bin/babel-node.js populate.js"
   },
