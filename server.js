@@ -1,4 +1,5 @@
 // Dependencies ---------------------------------------------------------------
+require('dotenv').config();
 const express = require("express");
 const routes = require('./routes');
 const bodyParser = require("body-parser");
@@ -35,7 +36,7 @@ app.use(bodyParser.json());
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  
+
   next();
   }); */
 
@@ -49,7 +50,7 @@ const SeedData = require("./scripts/seedDB");
 const seed = new SeedData();
 // enable the methods below to reseed as needed
 // seed.seedYelpCategories(); // master list of all Yelp category items
-// seed.seedYelpPlaces(); // dummy place data retrieved from Yelp 
+// seed.seedYelpPlaces(); // dummy place data retrieved from Yelp
 // seed.seedUsers(); // dummy user data from json
 
 // launch server --------------------------------------------------------------
