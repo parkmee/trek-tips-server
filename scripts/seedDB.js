@@ -86,6 +86,29 @@ class SeedData {
         console.log(`API error: ${err}`);
       });
   }
+
+  convertCSVtoJSON() {
+    const csv = require("../data/trek-tips-image-links.csv");
+    const lines = csv.split("\n");
+    const result = [];
+    
+    const headers = lines[0].split(",");
+    headers = headers.map(h => {
+      return h.trim();
+    });
+
+    for (let i = 1; i < lines.length; i++) {
+      const obj = {};
+      const currentLine = lines[i].split(",");
+
+      for (let j = 0; j < headers.length; j++) {
+        currentLine[j] = `"${currentLine[j]}"`;
+        obj[headers[j]] = currentLine[j];
+      }
+      result.push(obj);
+    }
+    console.log(JSON.stringify(result));
+  }
 }
 
 module.exports = SeedData;

@@ -51,6 +51,7 @@ const seed = new SeedData();
 // seed.seedYelpCategories(); // master list of all Yelp category items
 // seed.seedYelpPlaces(); // dummy place data retrieved from Yelp 
 // seed.seedUsers(); // dummy user data from json
+seed.convertCSVtoJSON();
 
 // launch server --------------------------------------------------------------
 app.listen(PORT, () => {
