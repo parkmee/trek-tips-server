@@ -1,7 +1,6 @@
 const axios = require("axios");
 const mongoose = require("mongoose");
 const db = require("../models");
-const userArray = require("../data/usertestdata.json");
 mongoose.set('useCreateIndex', true);
 
 // connect to mongoose database
@@ -22,6 +21,8 @@ class SeedData {
   } */
 
   seedUsers() {
+    const userArray = require("../data/usertestdata.json");
+
     db.User
       .remove({})
       .then(() => db.User.collection.insertMany(userArray))
@@ -88,26 +89,24 @@ class SeedData {
   }
 
   convertCSVtoJSON() {
-    const csv = require("../data/trek-tips-image-links.csv");
-    const lines = csv.split("\n");
-    const result = [];
-    
-    const headers = lines[0].split(",");
-    headers = headers.map(h => {
-      return h.trim();
-    });
+    // dependencies
+    const csvToJson = require("convert-csv-to-json");
+    const fileInputName = (__dirname + "/images.csv");
+    const fileOutputName = (__dirname + "/images.json");
 
-    for (let i = 1; i < lines.length; i++) {
-      const obj = {};
-      const currentLine = lines[i].split(",");
+    // convert csv file to json
+    csvToJson.fieldDelimiter(",").getJsonFromCsv(fileInputName);
+    csvToJson.generateJsonFileFromCsv(fileInputName, fileOutputName);
+  }
 
-      for (let j = 0; j < headers.length; j++) {
-        currentLine[j] = `"${currentLine[j]}"`;
-        obj[headers[j]] = currentLine[j];
-      }
-      result.push(obj);
-    }
-    console.log(JSON.stringify(result));
+  seedImages() {
+    const images = require("./images.json");
+
+      db.Image
+        .remove({})
+        .then(() => db.Image.collection.insertMany(images))
+        .then(data => { console.log(data.result.n + " records inserted!"); })
+        .catch(err => console.log(err));
   }
 }
 
