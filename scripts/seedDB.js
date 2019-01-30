@@ -1,7 +1,6 @@
 const axios = require("axios");
 const mongoose = require("mongoose");
 const db = require("../models");
-const userArray = require("../data/usertestdata.json");
 mongoose.set('useCreateIndex', true);
 
 // connect to mongoose database
@@ -22,6 +21,8 @@ class SeedData {
   } */
 
   seedUsers() {
+    const userArray = require("../data/usertestdata.json");
+
     db.User
       .remove({})
       .then(() => db.User.collection.insertMany(userArray))
@@ -85,6 +86,27 @@ class SeedData {
       .catch(err => {
         console.log(`API error: ${err}`);
       });
+  }
+
+  convertCSVtoJSON() {
+    // dependencies
+    const csvToJson = require("convert-csv-to-json");
+    const fileInputName = (__dirname + "/images.csv");
+    const fileOutputName = (__dirname + "/images.json");
+
+    // convert csv file to json
+    csvToJson.fieldDelimiter(",").getJsonFromCsv(fileInputName);
+    csvToJson.generateJsonFileFromCsv(fileInputName, fileOutputName);
+  }
+
+  seedImages() {
+    const images = require("./images.json");
+
+      db.Image
+        .remove({})
+        .then(() => db.Image.collection.insertMany(images))
+        .then(data => { console.log(data.result.n + " records inserted!"); })
+        .catch(err => console.log(err));
   }
 }
 

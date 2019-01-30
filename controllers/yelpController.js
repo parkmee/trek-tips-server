@@ -15,7 +15,10 @@ module.exports = {
   // to filter for multiple categories: "bars,french" will filter by bars OR french
   // the category alias should be used for the search: https://www.yelp.com/developers/documentation/v3/all_category_list
   // see here for more info on business search parameters - https://www.yelp.com/developers/documentation/v3/business_search
-  searchYelp: (location, categories) => {
+  searchYelp: (req, res) => {
+    const categories = req.body.categories;
+    const location = req.body.location;
+    
     axios.get(searchURL, {
       params: {
         categories: categories,

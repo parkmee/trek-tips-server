@@ -8,11 +8,16 @@ module.exports = {
       .then(dbUser => res.json(dbUser))
       .catch(err => res.status(422).json(err));
   },
+  getAllUsers: function (req,res) {
+    db.User
+      .find({})
+      .then(dbUser => res.json(dbUser))
+      .catch(err => res.status(422).json(err));
+  },
   findUserById: function(req, res) {
     db.User
       .findById({ _id: req.params.id })
       .populate("preferences")
-      .populate("history")
       .then(dbUser => res.json(dbUser))
       .catch(err => res.status(422).json(err));
   },
@@ -31,6 +36,15 @@ module.exports = {
 
     db.User
       .findByIdAndUpdate(userId, { $pull: { preferences: categoryId } } )
+      .then(dbUser => res.json(dbUser))
+      .catch(err => res.status(422).json(err));
+  },
+  addUserLocation: function(req, res) {
+    const location = req.body;
+    const userId = req.params.id;
+
+    db.User
+      .findByIdAndUpdate(userId, { $push: { locations: location } } )
       .then(dbUser => res.json(dbUser))
       .catch(err => res.status(422).json(err));
   }
