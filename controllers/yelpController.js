@@ -16,9 +16,9 @@ module.exports = {
   // the category alias should be used for the search: https://www.yelp.com/developers/documentation/v3/all_category_list
   // see here for more info on business search parameters - https://www.yelp.com/developers/documentation/v3/business_search
   searchYelp: (req, res) => {
-    const categories = req.body.categories;
+    const categories = req.body.categories; // change this - get names of stored preferences and from history
     const location = req.body.location;
-    
+
     axios.get(searchURL, {
       params: {
         categories: categories,

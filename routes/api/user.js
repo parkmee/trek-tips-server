@@ -14,7 +14,8 @@ router.route('/:id/category/:categoryid')
   .post(userController.addUserPreference)
   .delete(userController.removeUserPreference);
 
-router.route('/:id/location/add')
-  .post(userController.addUserLocation);
+router.route('/:id/location/')
+  .post(userController.addUserLocation)
+  .get(userController.findByUserLocation);
 
 module.exports = router;

@@ -44,7 +44,22 @@ module.exports = {
     const userId = req.params.id;
 
     db.User
+      .findById(userId)
+      .populate("locations")
+      .then(dbUser => console.log(dbUser))
+      .catch(err => res.status(422).json(err));
+
+    db.User
       .findByIdAndUpdate(userId, { $push: { locations: location } } )
+      .then(dbUser => res.json(dbUser))
+      .catch(err => res.status(422).json(err));
+  },
+  findByUserLocation: function(req, res) {
+    const location = req.body.location;
+    const userId = req.params.id;
+
+    db.User
+      .find({ _id: userId })
       .then(dbUser => res.json(dbUser))
       .catch(err => res.status(422).json(err));
   }
