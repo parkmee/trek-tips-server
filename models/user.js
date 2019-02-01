@@ -5,18 +5,19 @@ const Place = new Schema({
   place_id: { type: Schema.Types.ObjectId, ref: "History", unique: true },
   isSaved: { type: Boolean, default: false },
   hasVisited: { type: Boolean, default: false }
-})
+});
 
 const Location = new Schema({
   locationSearchString: { type: String, required: true, unique: true },
-  places: [Place] 
-})
+  places: [Place]
+});
 
 // TODO: include variables needed for Auth0
 // TODO: add pre-validation for capitalization
 const UserSchema = new Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
+  name: { type: String},
+  firstName: { type: String },
+  lastName: { type: String },
   username: { type: String, unique: true, required: true },
   email: { type: String, unique: true },
   auth0: { type: String },
