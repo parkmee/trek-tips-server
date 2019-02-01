@@ -1,10 +1,10 @@
 const db = require("../models");
 
 module.exports = {
-  findByLocation: function(req, res) {
-    db.Place
+  getPlaces: function(req, res) {
+    db.User
       .find({})
-      .then(dbPlace => res.json(dbPlace))
+      .then(dbUser => res.json(dbUser))
       .catch(err => res.status(422).json(err));
   }
 }
