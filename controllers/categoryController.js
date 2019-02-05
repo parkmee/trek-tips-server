@@ -18,5 +18,8 @@ module.exports = {
       .find({ "parent_aliases": parentAlias })
       .then(dbCategory => res.json(dbCategory))
       .catch(err => res.status(422).json(err));
-  }
+  },
+
+  // merge with images
+  
 }
