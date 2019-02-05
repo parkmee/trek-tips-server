@@ -9,6 +9,8 @@ module.exports = {
       .then(dbCategory => res.json(dbCategory))
       .catch(err => res.status(422).json(err));
   },
+
+  // get all children of parent category (using parent alias name)
   getChildCategories: function(req, res) {
     const parentAlias = req.params.parentCategory;
 
