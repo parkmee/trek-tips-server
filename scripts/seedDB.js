@@ -28,27 +28,11 @@ class SeedData {
       .remove({})
       .then(() => db.User.collection.insertMany(userArray))
       .then(data => { console.log(data.result.n + " records inserted!"); })
-      .then(seedPreferences())
       .catch(err => console.log(err));
-
   }
 
   seedPreferences() {
     const userArray = [];
-    /* const preferencesArray = [
-      "5c4c9c2bdd7cc490e0661062", // italian
-      "5c4c9c2,bdd7cc490e0660ef5", // desserts
-      "5c4c9c2bdd7cc490e066110c", // museums
-      "5c4c9c2bdd7cc490e066116f", // parks
-      "5c4c9c2bdd7cc490e06612c6", // sushi
-      "5c4c9c2bdd7cc490e0660db7", // asianfusion
-      "5c4c9c2bdd7cc490e0661079", // kids_activities
-      "5c4c9c2bdd7cc490e0661097",
-      "5c4c9c2bdd7cc490e0661393", // zoos
-      "5c4c9c2bdd7cc490e0660da4", // arcades
-      "5c4c9c2bdd7cc490e066110c"
-    ]; */
-
     const preferencesArray = [];
     const preferencesStr = [
       "italian",
@@ -72,16 +56,13 @@ class SeedData {
         .then(category => {
           console.log(category);
           preferencesArray.push(category._id);
-          if (preferencesArray.length === preferencesStr.length) {
-            
-          }
         })
     })
 
     /* db.User.find({})
       .then(users => {
+        console.log(users);
         users.forEach(user => {
-          console.log(user._id);
           userArray.push(user._id);
         })
         console.log(userArray);
@@ -101,8 +82,8 @@ class SeedData {
             .catch(err => console.log("preference update error: " + err));
         })
       })
-      .catch(err => console.log("user fetch error: " + err));
- */
+      .catch(err => console.log("user fetch error: " + err)); */
+
     /* db.User.find({})
       .then(function(users) {
         //console.log(users);
@@ -112,7 +93,6 @@ class SeedData {
           user.places.push(preferencesArray[num1])
           console.log(user.places);
         })
-      
       }) */
 
     /* db.User
@@ -121,7 +101,6 @@ class SeedData {
       .catch(err => res.status(422).json(err)); */
   }
     
-
   seedYelpPlaces() {
     const categories = "museums";
     const location = "Philadelphia, PA";
