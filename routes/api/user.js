@@ -29,6 +29,7 @@ router.route('/:id/places/visited')
 router.route('/:id/places/visited/:location')
   .post(userController.addUserVisitedPlace);
 
-router.route('/:id/places/visited/:placeid');
+router.route('/:id/places/visited/:placeid')
+  .delete(userController.removeUserVisitedPlace);
 
 module.exports = router;
