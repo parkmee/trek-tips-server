@@ -30,6 +30,13 @@ module.exports = {
       }
     }).then(recommendations => {
       console.log(recommendations.data);
+
+      // -------------------------------------
+      // check to see if id is stored in user's places
+      // add flags for hasVisited and isSaved
+
+
+      // -----------------------------------------
       res.json(recommendations.data);
     })
       .catch(err => {
