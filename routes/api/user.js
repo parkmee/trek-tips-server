@@ -14,7 +14,21 @@ router.route('/:id/category/:categoryid')
   .post(userController.addUserPreference)
   .delete(userController.removeUserPreference);
 
-router.route('/:id/location/add')
-  .post(userController.addUserLocation);
+router.route('/:id/places/saved')
+  .get(userController.getUserSavedPlaces);
+
+router.route('/:id/places/saved/:location')
+  .post(userController.addUserSavedPlace);
+
+router.route('/:id/places/saved/:placeid')
+  .delete(userController.removeUserSavedPlace);
+
+router.route('/:id/places/visited')
+  .get(userController.getUserVisitedPlaces);
+
+router.route('/:id/places/visited/:location')
+  .post(userController.addUserVisitedPlace);
+
+router.route('/:id/places/visited/:placeid');
 
 module.exports = router;

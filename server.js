@@ -54,6 +54,7 @@ const seed = new SeedData();
 // seed.seedUsers(); // dummy user data from json
 // seed.convertCSVtoJSON(); // create json file of image links
 // seed.seedImages(); // upload image json file as collection
+// seed.seedPreferences();
 
 // launch server --------------------------------------------------------------
 app.listen(PORT, () => {
