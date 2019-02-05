@@ -8,7 +8,13 @@ module.exports = {
       .find({ "parent_aliases.0": { "$exists": false }})
       .then(dbCategory => res.json(dbCategory))
       .catch(err => res.status(422).json(err));
+  },
+  getChildCategories: function(req, res) {
+    const parentAlias = req.params.parentCategory;
+
+    db.Category
+      .find({ "parent_aliases": parentAlias })
+      .then(dbCategory => res.json(dbCategory))
+      .catch(err => res.status(422).json(err));
   }
 }
-// get by parent alias
-// return
