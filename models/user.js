@@ -9,13 +9,14 @@ const Place = new Schema({
   alias: { type: String, unique: true },
   name: { type: String },
   image_url: { type: String }
-})
+});
 
 // TODO: include variables needed for Auth0
 // TODO: add pre-validation for capitalization
 const UserSchema = new Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
+  name: { type: String},
+  firstName: { type: String },
+  lastName: { type: String },
   username: { type: String, unique: true, required: true },
   email: { type: String, unique: true },
   auth0: { type: String },
