@@ -35,7 +35,7 @@ app.use('/', routes);
 const SeedData = require('./scripts/seedDB');
 const seed = new SeedData();
 // enable the methods below to reseed as needed
-// RUN IN ORDER, ONE AT A TIME OR YOU WILL HAVE DUPLICATION OF DATA (IF RUNNING IN WATCH MODE)
+// RUN IN ORDER, ONE AT A TIME, OR YOU WILL HAVE DUPLICATION OF DATA (IF RUNNING IN WATCH MODE)
 // seed.seedYelpCategories(); // master list of all Yelp category items
 // seed.seedYelpPlaces(); // dummy place data retrieved from Yelp
 // seed.seedUsers(); // dummy user data from json 
@@ -44,7 +44,6 @@ const seed = new SeedData();
 // seed.seedPreferences();
 // seed.convertCSVtoJSON(); // create json file of image links
 // seed.seedImages(); // upload image json file as collection
-
 
 // launch server --------------------------------------------------------------
 app.listen(PORT, () => {
