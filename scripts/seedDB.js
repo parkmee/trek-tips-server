@@ -1,6 +1,7 @@
 const axios = require("axios");
 const mongoose = require("mongoose");
 const db = require("../models");
+const fs = require("fs");
 mongoose.set('useCreateIndex', true);
 
 // connect to mongoose database
@@ -21,14 +22,105 @@ class SeedData {
   } */
 
   seedUsers() {
-    const userArray = require("../data/usertestdata.json");
+    const userArray = require("./usertestdata.json");
 
     db.User
       .remove({})
       .then(() => db.User.collection.insertMany(userArray))
       .then(data => { console.log(data.result.n + " records inserted!"); })
+      .then(seedPreferences())
       .catch(err => console.log(err));
+
   }
+
+  seedPreferences() {
+    const userArray = [];
+    /* const preferencesArray = [
+      "5c4c9c2bdd7cc490e0661062", // italian
+      "5c4c9c2,bdd7cc490e0660ef5", // desserts
+      "5c4c9c2bdd7cc490e066110c", // museums
+      "5c4c9c2bdd7cc490e066116f", // parks
+      "5c4c9c2bdd7cc490e06612c6", // sushi
+      "5c4c9c2bdd7cc490e0660db7", // asianfusion
+      "5c4c9c2bdd7cc490e0661079", // kids_activities
+      "5c4c9c2bdd7cc490e0661097",
+      "5c4c9c2bdd7cc490e0661393", // zoos
+      "5c4c9c2bdd7cc490e0660da4", // arcades
+      "5c4c9c2bdd7cc490e066110c"
+    ]; */
+
+    const preferencesArray = [];
+    const preferencesStr = [
+      "italian",
+      "desserts",
+      "museums",
+      "parks",
+      "sushi",
+      "asianfusion",
+      "kids_activities",
+      "zoos",
+      "arcade",
+      "festivals",
+      "korean",
+      "sushi",
+      "mexican"
+    ];
+
+    preferencesStr.forEach(preference => {
+      db.Category
+        .find({ "alias": preference })
+        .then(category => {
+          console.log(category);
+          preferencesArray.push(category._id);
+          if (preferencesArray.length === preferencesStr.length) {
+            
+          }
+        })
+    })
+
+    /* db.User.find({})
+      .then(users => {
+        users.forEach(user => {
+          console.log(user._id);
+          userArray.push(user._id);
+        })
+        console.log(userArray);
+        userArray.forEach(userId => {
+          const num1 = Math.floor(Math.random() * preferencesArray.length);
+          const num2 = Math.floor(Math.random() * preferencesArray.length);
+
+          db.User
+            .findOneAndUpdate(
+              userId, 
+              { $push: 
+                { preferences: 
+                  { $each: [preferencesArray[num1], preferencesArray[num2]] }
+                }
+              }
+            )
+            .catch(err => console.log("preference update error: " + err));
+        })
+      })
+      .catch(err => console.log("user fetch error: " + err));
+ */
+    /* db.User.find({})
+      .then(function(users) {
+        //console.log(users);
+        users.forEach(user => {
+          const num1 = Math.floor(Math.random() * preferencesArray.length);
+
+          user.places.push(preferencesArray[num1])
+          console.log(user.places);
+        })
+      
+      }) */
+
+    /* db.User
+      .findByIdAndUpdate(userId, { $push: { preferences: categoryId } }, { new: true })
+      .then(dbUser => res.json(dbUser))
+      .catch(err => res.status(422).json(err)); */
+  }
+    
 
   seedYelpPlaces() {
     const categories = "museums";
