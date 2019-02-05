@@ -3,7 +3,9 @@ require('dotenv').config();
 const express = require('express');
 const routes = require('./routes');
 const bodyParser = require('body-parser');
-const logger = require('morgan');
+
+// Dev Dependencies -----------------------------------------------------------
+// const logger = require('morgan');
 
 // Connect to MongoDB Database ------------------------------------------------
 const mongoose = require('mongoose');
@@ -22,7 +24,7 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 // Middleware -----------------------------------------------------------------
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
