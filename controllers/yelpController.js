@@ -32,7 +32,6 @@ module.exports = {
         'Access-Control-Allow-Headers': 'Origin'
       }
     }).then(recommendations => {
-<<<<<<< HEAD
       for (let i = 0; i < recommendations.data.businesses.length; i++) {
         recommendations.data.businesses[i].isSaved = false;
         recommendations.data.businesses[i].hasVisited = false;
@@ -55,17 +54,6 @@ module.exports = {
     })
     .catch(err => {
       console.log(err);
-=======
-      console.log(recommendations.data);
-
-      // -------------------------------------
-      // check to see if id is stored in user's places
-      // add flags for hasVisited and isSaved
-
-
-      // -----------------------------------------
-      res.json(recommendations.data);
->>>>>>> bf2f3878343c7f58f083f4c37d7a42d6a7feb200
     })
   }
 }
