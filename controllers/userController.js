@@ -57,9 +57,12 @@ module.exports = {
   // THROWING POST ERROR: "The field 'places' must be an array but is of type object in document {_id: ObjectId('5c55e37dd60b190948453c08')}"
   // Using POST test message: http://192.168.2.195:8000/api/user/5c55e37dd60b190948453c08/places/saved/atlanta+ga
   addUserSavedPlace: function (req, res) {
-    const userId = req.params.id;
-    const yelpId = { "id": req.body.id }; // req body from yelp search
-    console.log(yelpId);
+    const query = { "_id": req.params.id };
+    const update = { $set: {
+      place_id: req.body.id, // req body from response of yelp search api
+      isSaved: true
+    }};
+    const options = { upsert: true, new: true };
 
     // MIKE's SUGGESTION on addUserSavedPlace:
     // 1) check to see if the place exists in the user's places
@@ -70,8 +73,18 @@ module.exports = {
     //          aab) if it does not then add the places collection
     //            aaaa) add the new place to the user's places setting isSaved = true
     //
+
     db.User
-      .find()
+      .find(query)
+      .then(dbUser => {
+        if (dbUser.length === 0) {
+          res.json("no matches found");
+        } else {
+          console.log("match found");
+          res.json(dbUser);
+        }
+      })
+      .catch(err => res.status(422).json(err));
 
     // WORKING - Upon saving place, a new place document will be added to the place
     // collection if it does not already exist
@@ -102,9 +115,9 @@ module.exports = {
         } 
       }, { new: true })
       .then(dbUser => res.json(dbUser))
-      .catch(err => res.status(422).json(err)); */
+      .catch(err => res.status(422).json(err)); 
   })
-      .catch(err => res.status(422).json(err));
+      .catch(err => res.status(422).json(err)); */
 },
   getUserVisitedPlaces: function (req, res) {
     db.User

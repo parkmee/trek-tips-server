@@ -12,11 +12,6 @@ module.exports = {
     const update = { $set: req.body };
     const options = { new: true, upsert: true };
 
-    /* db.Place
-      .findOneAndUpdate({ "alias": "fox-bros-bar-b-q-atlanta" })
-      .then(dbPlace => res.json(dbPlace))
-      .catch(err => res.status(422).json(err)); */
-
     db.Place
       .findOneAndUpdate(query, update, options)
       .then(dbPlace => {
