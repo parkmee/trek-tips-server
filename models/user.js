@@ -2,13 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const Place = new Schema({
-  place_id: { type: Schema.Types.ObjectId, ref: "Place", unique: true },
+  _id: { type: Schema.Types.ObjectId, ref: "Place", unique: true },
+  place_id: { type: String, unique: true },
   isSaved: { type: Boolean, default: false },
   hasVisited: { type: Boolean, default: false },
-  locationSearchString: { type: String },
-  alias: { type: String, unique: true },
-  name: { type: String },
-  image_url: { type: String }
 });
 
 // TODO: include variables needed for Auth0

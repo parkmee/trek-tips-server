@@ -21,7 +21,7 @@ class SeedData {
   } */
 
   seedUsers() {
-    const userArray = require("../data/usertestdata.json");
+    const userArray = require("./usertestdata.json");
 
     db.User
       .remove({})
