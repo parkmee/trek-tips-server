@@ -38,7 +38,7 @@ const seed = new SeedData();
 // RUN IN ORDER, ONE AT A TIME, OR YOU WILL HAVE DUPLICATION OF DATA (IF RUNNING IN WATCH MODE)
 // seed.seedYelpCategories(); // master list of all Yelp category items
 // seed.seedYelpPlaces(); // dummy place data retrieved from Yelp
-// seed.seedUsers(); // dummy user data from json 
+// seed.seedUsers(); // dummy user data from json  
 
 // DO NOT RUN
 // seed.seedPreferences();

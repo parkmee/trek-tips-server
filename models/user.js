@@ -1,13 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const Place = new Schema({
-  _id: { type: Schema.Types.ObjectId, ref: "Place", unique: true },
-  place_id: { type: String, unique: true },
-  isSaved: { type: Boolean, default: false },
-  hasVisited: { type: Boolean, default: false },
-});
-
 // TODO: include variables needed for Auth0
 // TODO: add pre-validation for capitalization
 const UserSchema = new Schema({
@@ -18,7 +11,8 @@ const UserSchema = new Schema({
   email: { type: String, unique: true },
   auth0: { type: String },
   preferences: [{ type: Schema.Types.ObjectId, ref: "Category" }],
-  places: [Place]
+  isSaved: [{ type: Schema.Types.ObjectId, ref: "Place" }],
+  hasVisited: [{ type: Schema.Types.ObjectId, ref: "Place" }]
 });
 
 const User = mongoose.model("User", UserSchema);

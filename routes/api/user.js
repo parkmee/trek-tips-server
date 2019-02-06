@@ -14,20 +14,18 @@ router.route('/:id/category/:categoryid')
   .post(userController.addUserPreference)
   .delete(userController.removeUserPreference);
 
-router.route('/:id/places/saved')
-  .get(userController.getUserSavedPlaces);
+router.route('/:id/places')
+  .get(userController.getAllUserPlaces);
 
 router.route('/:id/places/saved')
-  .get()
+  .get(userController.getUserSavedPlaces)
   .post(userController.addUserSavedPlace);
 
-router.route('/:id/places/saved/:placeid')
+router.route('/:id/places/saved/:place_id')
   .delete(userController.removeUserSavedPlace);
 
 router.route('/:id/places/visited')
-  .get(userController.getUserVisitedPlaces);
-
-router.route('/:id/places/visited/')
+  .get(userController.getUserVisitedPlaces)
   .post(userController.addUserVisitedPlace);
 
 router.route('/:id/places/visited/:placeid')
