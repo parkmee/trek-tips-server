@@ -12,7 +12,7 @@ const UserSchema = new Schema({
   auth0: { type: String },
   preferences: [{ type: Schema.Types.ObjectId, ref: "Category" }],
   isSaved: [{ type: Schema.Types.ObjectId, ref: "Place" }],
-  hasVisited: [{ type: Schema.Types.ObjectId, ref: "Places" }]
+  hasVisited: [{ type: Schema.Types.ObjectId, ref: "Place" }]
 });
 
 const User = mongoose.model("User", UserSchema);

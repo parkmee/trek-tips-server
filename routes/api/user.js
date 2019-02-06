@@ -14,6 +14,9 @@ router.route('/:id/category/:categoryid')
   .post(userController.addUserPreference)
   .delete(userController.removeUserPreference);
 
+router.route('/:id/places')
+  .get(userController.getAllUserPlaces);
+
 router.route('/:id/places/saved')
   .get(userController.getUserSavedPlaces)
   .post(userController.addUserSavedPlace);

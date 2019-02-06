@@ -155,5 +155,62 @@ module.exports = {
       .findOneAndUpdate(query, { $pull: update }, options)
       .then(dbUser => res.json(dbUser))
       .catch(err => res.status(422).json(err));
+  },
+  getAllUserPlaces: function (req, res) {
+
+    db.User
+      .find({ _id: req.params.id })
+      .populate("isSaved")
+      .populate("hasVisited")
+      .then(dbUser => {
+        //res.json(dbUser);
+        const savedPlaces = dbUser[0].isSaved;
+        const visitedPlaces = dbUser[0].hasVisited;
+        const matchingPlaces = [];
+
+        // creates matchingPlaces array of places that are visited AND saved
+        // will use
+        savedPlaces.forEach(sp => {
+          console.log(sp.id);
+          visitedPlaces.forEach(vp => {
+            console.log("J", vp.id)
+            if (sp.id === vp.id) {
+              console.log("match");
+              matchingPlaces.push(vp);
+            }
+          })
+        })
+        console.log(matchingPlaces);
+
+        // created array of just the ids of matching places
+        const matchingPlacesId = matchingPlaces.map(place => place.id);
+        console.log("mp", matchingPlacesId)
+
+        // NEED HELP FILTERING savedPlaces and vistedPlaces against matchingPlaces
+        
+
+        console.log(filterSavedPlaces.length);
+        // HELP ABOVE THIS LINE
+
+        const userStoredPlaces = [];
+
+        // savedPlaces and visitedPlaces to be exchanged for their filtered versions
+        // containing only unique values to each
+
+        /* savedPlaces.forEach(place => {
+          userStoredPlaces.push({ place: place, isSaved: true });
+        });
+        visitedPlaces.forEach(place => {
+          userStoredPlaces.push({ place: place, hasVisited: true });
+        });*/
+
+        matchingPlaces.forEach(place => {
+          userStoredPlaces.push({ place: place, isSaved: true, hasVisited: true })
+        });
+        console.log(userStoredPlaces);
+        res.json(userStoredPlaces);
+      })
+      .catch(err => res.status(422).json(err));
+
   }
 };
