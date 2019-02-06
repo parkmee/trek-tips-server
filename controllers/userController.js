@@ -26,187 +26,134 @@ module.exports = {
   },
   // add user preferences
   addUserPreference: function (req, res) {
-    const categoryId = req.params.categoryid;
-    const userId = req.params.id;
+    const query = { _id: req.params.id };
+    const update = { preferences: req.params.categoryid };
+    const options = { new: true };
 
     db.User
-      .findByIdAndUpdate(userId, { $push: { preferences: categoryId } }, { new: true })
-      .then(dbUser => res.json(dbUser))
+      .find({ _id: req.params.id, preferences: req.params.categoryid })
+      .then(dbUser => {
+        if (dbUser.length === 0) {
+          console.log("no matches - adding new preference");
+          db.User
+            .findOneAndUpdate(query, { $push: update }, options)
+            .then(dbUser => res.json(dbUser))
+            .catch(err => res.status(422).json(err))
+        } else {
+          res.json(`Preference already saved by user - _id: ${req.params.categoryid}`);
+        }
+      })
       .catch(err => res.status(422).json(err));
   },
   // remove user preferences
   removeUserPreference: function (req, res) {
-    const categoryId = req.params.categoryid;
-    const userId = req.params.id;
+    const query = { _id: req.params.id };
+    const update = { preferences: req.params.categoryid };
+    const options = { new: true };
 
     db.User
-      .findByIdAndUpdate(userId, { $pull: { preferences: categoryId } })
+      .findOneAndUpdate(query, { $pull: update }, options)
       .then(dbUser => res.json(dbUser))
       .catch(err => res.status(422).json(err));
   },
-  // need to test once places can be added
+  // get user saved places and populate place info
   getUserSavedPlaces: function (req, res) {
     db.User
       .findById({ _id: req.params.id })
-      .where({ "places.isSaved": true })
-      .populate("places.place_id")
+      .populate("isSaved")
       .then(dbUser => res.json(dbUser))
       .catch(err => res.status(422).json(err));
   },
-  // TODO - NEED HELP WITH THIS
-  // THROWING POST ERROR: "The field 'places' must be an array but is of type object in document {_id: ObjectId('5c55e37dd60b190948453c08')}"
-  // Using POST test message: http://192.168.2.195:8000/api/user/5c55e37dd60b190948453c08/places/saved/atlanta+ga
-  addUserSavedPlace: function (req, res) {
-    const query = { "_id": req.params.id };
-    const update = { $set: {
-      place_id: req.body.id, // req body from response of yelp search api
-      isSaved: true
-    }};
-    const options = { upsert: true, new: true };
-
-    // MIKE's SUGGESTION on addUserSavedPlace:
-    // 1) check to see if the place exists in the user's places
-    //    a) If it does, then update the isSaved flag = true
-    //    b) If it does not
-    //        aa) check to see if it exist in the places collection
-    //          aaa) if it does then add it to the user's places
-    //          aab) if it does not then add the places collection
-    //            aaaa) add the new place to the user's places setting isSaved = true
-    //
+  // remove user saved place
+  removeUserSavedPlace: function (req, res) {
+    const query = { _id: req.params.id };
+    const update = { isSaved: req.params.place_id };
+    const options = { new: true };
 
     db.User
-      .find(query)
-      .then(dbUser => {
-        if (dbUser.length === 0) {
-          res.json("no matches found");
-        } else {
-          console.log("match found");
-          res.json(dbUser);
-        }
+      .findOneAndUpdate(query, { $pull: update }, options)
+      .then(dbUser => res.json(dbUser))
+      .catch(err => res.status(422).json(err));
+  },
+  // add user saved place - add to place collection if missing
+  addUserSavedPlace: function (req, res) {
+    const query1 = { id: req.body.id };
+    const update1 = req.body;
+    const options1 = { new: true, upsert: true };
+
+    db.Place
+      .findOneAndUpdate(query1, { $set: update1 }, options1)
+      .then(dbPlace => {
+        console.log(dbPlace);
+        const query2 = { _id: req.params.id };
+        const update2 = { isSaved: dbPlace._id };
+        const options2 = { new: true };
+
+        db.User
+          .find({ _id: req.params.id, isSaved: dbPlace._id })
+          .then(dbUser => {
+            if (dbUser.length === 0) {
+              console.log("no matches - adding new entry to saved places");
+              db.User
+                .findOneAndUpdate(query2, { $push: update2 }, options2)
+                .then(dbUser => res.json(dbUser))
+                .catch(err => res.status(422).json(err))
+            } else {
+              res.json(`Place already saved by user - _id: ${dbPlace._id}`);
+            }
+          })
+          .catch(err => res.status(422).json(err));
       })
       .catch(err => res.status(422).json(err));
-
-    // WORKING - Upon saving place, a new place document will be added to the place
-    // collection if it does not already exist
-    /* db.Place
-      .find(yelpId)
-      .then(dbPlace => {
-        if (dbPlace.length === 0) {
-          console.log("adding new place");
-          db.Place
-            .create(req.body)
-            .then(dbPlace2 => res.json(dbPlace2))
-            .catch(err => res.status(422).json(err));
-        } else {
-          console.log("record exists");
-          res.json(dbPlace);
-        } */
-    // THIS IS WHERE THE ERROR OCCURS
-    /* console.log("ready for inserting ref into user record");
-    db.User
-      .findByIdAndUpdate(userId, { 
-        $push: {
-          "places": {
-            place_id: dbPlace._id,
-            isSaved: true,
-            alias: dbPlace.alias,
-            name: dbPlace.name
-          }
-        } 
-      }, { new: true })
-      .then(dbUser => res.json(dbUser))
-      .catch(err => res.status(422).json(err)); 
-  })
-      .catch(err => res.status(422).json(err)); */
-},
+  },
+  // get user visited places and populate place info
   getUserVisitedPlaces: function (req, res) {
     db.User
       .findById({ _id: req.params.id })
-      .where({ "places.hasVisited": true })
-      .populate("places_id")
+      .populate("hasVisited")
       .then(dbUser => res.json(dbUser))
       .catch(err => res.status(422).json(err));
   },
-// TO DO - SAME ERROR AS ABOVE
-addUserVisitedPlace: function (req, res) {
-  const userId = req.params.id;
-  const locationSearchStr = req.params.location; // location search string from yelp search
-  const placeAlias = { "name": req.body.alias }; // req body from yelp search
+  // add user visited place - add to place collection if missing
+  addUserVisitedPlace: function (req, res) {
+    const query1 = { id: req.body.id };
+    const update1 = req.body;
+    const options1 = { new: true, upsert: true };
 
-  // WORKING - Upon saving place, a new place document will be added to the place
-  // collection if it does not already exist
-  db.Place
-    .find(placeAlias)
-    .then(dbPlace => {
-      if (dbPlace.length === 0) {
-        console.log("adding new place");
-        db.Place
-          .create(req.body)
-          .then(dbPlace => res.json(dbPlace))
-          .catch(err => res.status(422).json(err));
-      } else {
-        console.log("record exists");
-        res.json(dbPlace);
-      }
-      // THIS IS WHERE THE ERROR OCCURS
-      console.log("ready for inserting ref into user record");
-      db.User
-        .findByIdAndUpdate(userId, {
-          $push: {
-            "places": {
-              place_id: dbPlace._id,
-              hasVisited: true, // this is the only difference from above
-              locationSearchString: locationSearchStr,
-              alias: dbPlace.alias,
-              name: dbPlace.name
+    db.Place
+      .findOneAndUpdate(query1, { $set: update1 }, options1)
+      .then(dbPlace => {
+        console.log(dbPlace);
+        const query2 = { _id: req.params.id };
+        const update2 = { hasVisited: dbPlace._id };
+        const options2 = { new: true };
+
+        db.User
+          .find({ _id: req.params.id, hasVisited: dbPlace._id })
+          .then(dbUser => {
+            if (dbUser.length === 0) {
+              console.log("no matches - adding new entry to visited places");
+              db.User
+                .findOneAndUpdate(query2, { $push: update2 }, options2)
+                .then(dbUser => res.json(dbUser))
+                .catch(err => res.status(422).json(err))
+            } else {
+              res.json(`Place already visited by user - _id: ${dbPlace._id}`);
             }
-          }
-        }, { new: true })
-        .then(dbUser => res.json(dbUser))
-        .catch(err => res.status(422).json(err));
-    })
-    .catch(err => res.status(422).json(err));
-},
-removeUserSavedPlace: function (req, res) {
-  const userId = req.params.id;
-  const placeId = req.params.placeid;
-
-  db.User
-    .findByIdAndUpdate(userId, { "places.isSaved": false })
-    .where({ "places.place_id": placeId })
-    .then(dbUser => {
-      if ("places.hasVisited" === false) {
-        db.User
-        findByIdAndUpdate(userId, {
-          $pull: { places: { place_id: placeId } }
-        })
-          .then(dbUser2 => res.json(dbUser2))
+          })
           .catch(err => res.status(422).json(err));
-      } else {
-        res.json(dbUser);
-      }
-    })
-    .catch(err => res.status(422).json(err));
-},
-removeUserVisitedPlace: function (req, res) {
-  const userId = req.params.id;
-  const placeId = req.params.placeid;
+      })
+      .catch(err => res.status(422).json(err));
+  },
+  // remove user visited place
+  removeUserVisitedPlace: function (req, res) {
+    const query = { _id: req.params.id };
+    const update = { hasVisited: req.params.place_id };
+    const options = { new: true };
 
-  db.User
-    .findByIdAndUpdate(userId, { "places.hasVisited": false })
-    .where({ "places.place_id": placeId })
-    .then(dbUser => {
-      if ("places.isSaved" === false) {
-        db.User
-        findByIdAndUpdate(userId, {
-          $pull: { places: { place_id: placeId } }
-        })
-          .then(dbUser2 => res.json(dbUser2))
-          .catch(err => res.status(422).json(err));
-      } else {
-        res.json(dbUser);
-      }
-    })
-    .catch(err => res.status(422).json(err));
-}
+    db.User
+      .findOneAndUpdate(query, { $pull: update }, options)
+      .then(dbUser => res.json(dbUser))
+      .catch(err => res.status(422).json(err));
+  }
 };

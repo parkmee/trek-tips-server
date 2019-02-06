@@ -15,8 +15,6 @@ module.exports = {
     db.Place
       .findOneAndUpdate(query, update, options)
       .then(dbPlace => {
-        //console.log(req.body.alias);
-        //console.log(req.body.id);
         console.log(dbPlace);
         res.json(dbPlace);
       })
