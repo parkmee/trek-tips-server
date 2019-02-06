@@ -18,6 +18,7 @@ router.route('/:id/places/saved')
   .get(userController.getUserSavedPlaces);
 
 router.route('/:id/places/saved')
+  .get()
   .post(userController.addUserSavedPlace);
 
 router.route('/:id/places/saved/:placeid')
