@@ -1,6 +1,7 @@
 const axios = require("axios");
 const mongoose = require("mongoose");
 mongoose.set('useCreateIndex', true);
+const db = require("../models");
 
 // connect to mongoose database
 /* const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/trek-tips';
@@ -18,29 +19,41 @@ module.exports = {
   searchYelp: (req, res) => {
     const categories = req.body.categories;
     const location = req.body.location;
+    const userId = req.body.id;
     
     axios.get(searchURL, {
       params: {
         categories: categories,
-        location: location
+        location: location,
+        userId: userId
       },
       headers: {
         'Authorization': `Bearer ${process.env.YELP_API_KEY}`,
         'Access-Control-Allow-Headers': 'Origin'
       }
     }).then(recommendations => {
-      console.log(recommendations.data);
+      for (let i = 0; i < recommendations.data.businesses.length; i++) {
+        recommendations.data.businesses[i].isSaved = false;
+        recommendations.data.businesses[i].hasVisited = false;
 
-      // -------------------------------------
-      // check to see if id is stored in user's places
-      // add flags for hasVisited and isSaved
-
-
-      // -----------------------------------------
-      res.json(recommendations.data);
+        db.User
+          .findOne({ _id: userId, "places.place_id": recommendations.data.businesses[i].id})
+          .select("places.isSaved places.hasVisited")
+          .catch(err => {
+            // dunno why but catch needs to be first here or it doesn't work right!
+            res.json(recommendations.data); 
+          })
+          .then(result => {
+            if (result) {
+              recommendations.data.businesses[i].isSaved = result.places[0].isSaved;
+              recommendations.data.businesses[i].hasVisited = result.places[0].hasVisited;
+            } 
+            res.json(recommendations.data); 
+          });
+      }
     })
-      .catch(err => {
-        console.log(err);
-      })
+    .catch(err => {
+      console.log(err);
+    })
   }
 }
