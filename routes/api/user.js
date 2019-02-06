@@ -17,7 +17,8 @@ router.route('/:id/category/:categoryid')
 router.route('/:id/places/saved')
   .get(userController.getUserSavedPlaces);
 
-router.route('/:id/places/saved/:location')
+router.route('/:id/places/saved')
+  .get()
   .post(userController.addUserSavedPlace);
 
 router.route('/:id/places/saved/:placeid')
@@ -26,7 +27,7 @@ router.route('/:id/places/saved/:placeid')
 router.route('/:id/places/visited')
   .get(userController.getUserVisitedPlaces);
 
-router.route('/:id/places/visited/:location')
+router.route('/:id/places/visited/')
   .post(userController.addUserVisitedPlace);
 
 router.route('/:id/places/visited/:placeid')

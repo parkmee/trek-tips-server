@@ -1,6 +1,7 @@
 const axios = require("axios");
 const mongoose = require("mongoose");
 const db = require("../models");
+const fs = require("fs");
 mongoose.set('useCreateIndex', true);
 
 // connect to mongoose database
@@ -30,6 +31,76 @@ class SeedData {
       .catch(err => console.log(err));
   }
 
+  seedPreferences() {
+    const userArray = [];
+    const preferencesArray = [];
+    const preferencesStr = [
+      "italian",
+      "desserts",
+      "museums",
+      "parks",
+      "sushi",
+      "asianfusion",
+      "kids_activities",
+      "zoos",
+      "arcade",
+      "festivals",
+      "korean",
+      "sushi",
+      "mexican"
+    ];
+
+    preferencesStr.forEach(preference => {
+      db.Category
+        .find({ "alias": preference })
+        .then(category => {
+          console.log(category);
+          preferencesArray.push(category._id);
+        })
+    })
+
+    /* db.User.find({})
+      .then(users => {
+        console.log(users);
+        users.forEach(user => {
+          userArray.push(user._id);
+        })
+        console.log(userArray);
+        userArray.forEach(userId => {
+          const num1 = Math.floor(Math.random() * preferencesArray.length);
+          const num2 = Math.floor(Math.random() * preferencesArray.length);
+
+          db.User
+            .findOneAndUpdate(
+              userId, 
+              { $push: 
+                { preferences: 
+                  { $each: [preferencesArray[num1], preferencesArray[num2]] }
+                }
+              }
+            )
+            .catch(err => console.log("preference update error: " + err));
+        })
+      })
+      .catch(err => console.log("user fetch error: " + err)); */
+
+    /* db.User.find({})
+      .then(function(users) {
+        //console.log(users);
+        users.forEach(user => {
+          const num1 = Math.floor(Math.random() * preferencesArray.length);
+
+          user.places.push(preferencesArray[num1])
+          console.log(user.places);
+        })
+      }) */
+
+    /* db.User
+      .findByIdAndUpdate(userId, { $push: { preferences: categoryId } }, { new: true })
+      .then(dbUser => res.json(dbUser))
+      .catch(err => res.status(422).json(err)); */
+  }
+    
   seedYelpPlaces() {
     const categories = "museums";
     const location = "Philadelphia, PA";
