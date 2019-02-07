@@ -1,4 +1,5 @@
 const db = require("../models");
+const differenceBy = require("lodash.differenceby");
 
 // methods for userController
 module.exports = {
@@ -167,33 +168,88 @@ module.exports = {
         const savedPlaces = dbUser[0].isSaved;
         const visitedPlaces = dbUser[0].hasVisited;
         const matchingPlaces = [];
+        const matchingPlacesId = [];
+        const filteredVisitedPlaces = [];
 
         // creates matchingPlaces array of places that are visited AND saved
         // will use
         savedPlaces.forEach(sp => {
-          console.log(sp.id);
           visitedPlaces.forEach(vp => {
-            console.log("J", vp.id)
             if (sp.id === vp.id) {
-              console.log("match");
+              //console.log("match");
               matchingPlaces.push(vp);
             }
           })
         })
-        console.log(matchingPlaces);
+        console.log("mp", matchingPlaces.length);
 
-        // created array of just the ids of matching places
-        const matchingPlacesId = matchingPlaces.map(place => place.id);
-        console.log("mp", matchingPlacesId)
+        // ***********************************************************
+        // THIS PART ABOVE IS WORKING
+        // VARIOUS FAILED TRIES AT REMOVING MATCHED PLACES FROM THE SAVED AND VISITED PLACES 
+        // ARRAYS FOLLOW
 
-        // NEED HELP FILTERING savedPlaces and vistedPlaces against matchingPlaces
+        /* matchingPlaces.forEach(place => {
+          matchingPlacesId.push({ id: place.id });
+        });
+        console.log("mp id", matchingPlacesId);
+
+        matchingPlacesId.forEach(id => {
+          for (let i in savedPlaces) {
+            const filtered = _.differenceBy(savedPlaces[i], id, "id");
+            console.log("filtering");
+          }
+          res.json(filtered);
+        }) */
+        //const filtered = _.differenceBy(savedPlaces, "id")
+
+
+        /* const filteredSavedPlaces = savedPlaces.filter(el => {
+          return el.
+        }) */
+        /*  const filteredSavedPlaces = savedPlaces.map(sp => {
+          console.log("check 1");
+           console.log(sp.id, "*****************************");
+          matchingPlaces.forEach(mp => {
+            console.log(mp.id);
+            if (sp.id === mp.id) {
+              console.log("Match");
+            } else {
+              console.log(sp);
+              return sp;
+            }
+          })
+        })
+        console.log(filteredSavedPlaces.length);
+        console.log("hi");
+         res.json(filteredSavedPlaces); */
+
+
+        //console.log("mp", matchingPlaces.length);
+
+
+        /* // created array of just the ids of matching places
+        matchingPlaces.forEach(place => {
+          matchingPlacesId.push({ id: place.id });
+        });
+
+        //const matchingPlacesId = matchingPlaces.map(place => place.id );
+        console.log(matchingPlacesId)
+
+        // NEED HELP FILTERING savedPlaces and visitedPlaces against matchingPlaces
+        const filteredSavedPlaces = [];
         
+          const filter = _.map(savedPlaces, val => {
 
-        console.log(filterSavedPlaces.length);
-        // HELP ABOVE THIS LINE
-
-        const userStoredPlaces = [];
-
+          }) */
+        /* 
+                console.log(filteredSavedPlaces.length);
+                console.log('hello');
+                // HELP ABOVE THIS LINE
+        
+                const userStoredPlaces = [];
+         */
+        // ********************************************************************
+        // THIS PART BELOW IS TESTED AND WORKED FINE
         // savedPlaces and visitedPlaces to be exchanged for their filtered versions
         // containing only unique values to each
 
@@ -204,11 +260,11 @@ module.exports = {
           userStoredPlaces.push({ place: place, hasVisited: true });
         });*/
 
-        matchingPlaces.forEach(place => {
+        /* matchingPlaces.forEach(place => {
           userStoredPlaces.push({ place: place, isSaved: true, hasVisited: true })
         });
         console.log(userStoredPlaces);
-        res.json(userStoredPlaces);
+        res.json(userStoredPlaces); */
       })
       .catch(err => res.status(422).json(err));
 
