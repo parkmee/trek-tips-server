@@ -36,20 +36,46 @@ module.exports = {
         recommendations.data.businesses[i].isSaved = false;
         recommendations.data.businesses[i].hasVisited = false;
 
+        // check to see if the user has an array member in hasVisited that has an id
+        // that matches the yelpId.  Note that we need to match on id not _id
+        // _id is the mongoose record id whereas id is the yelp id
         db.User
-          .findOne({ _id: userId, "places.place_id": recommendations.data.businesses[i].id})
-          .select("places.isSaved places.hasVisited")
+          .findOne({ _id: userId, "hasVisited.id": recommendations.data.businesses[i].id})
+          .populate("hasVisited")
           .catch(err => {
             // dunno why but catch needs to be first here or it doesn't work right!
             res.json(recommendations.data); 
           })
           .then(result => {
-            if (result) {
-              recommendations.data.businesses[i].isSaved = result.places[0].isSaved;
-              recommendations.data.businesses[i].hasVisited = result.places[0].hasVisited;
+            if (result === 0) {
+              console.log("hasVisited result: ", result);
+              recommendations.data.businesses[i].hasVisited = true
             } 
+          })
+
+        // check to see if the user has an array member in isSaved that has an id
+        // that matches the yelpId.  Note that we need to match on id not _id
+        // _id is the mongoose record id whereas id is the yelp id
+        db.User
+          .findOne({ _id: userId, "isSaved.id": recommendations.data.businesses[i].id})
+          .populate("isSaved")
+          .catch(err => {
+            // dunno why but catch needs to be first here or it doesn't work right!
             res.json(recommendations.data); 
+          })
+          .then(result => {
+            res.json(result); 
+            if (result === 0) {
+              console.log("isSaved result: ", result);
+              recommendations.data.businesses[i].isSaved = true
+            } 
           });
+
+        // if it was the last record in the recommendation results from Yelp
+        // send the response to the app
+        if (i === recommendations.data.businesses.length - 1) {
+          res.json(recommendations.data); 
+        }
       }
     })
     .catch(err => {
