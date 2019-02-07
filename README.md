@@ -28,6 +28,7 @@ See our [Trek Tips Info Page](https://trek-tips-info.herokuapp.com/) for more in
   * If-env
   * Lodash.differenceby
   * Path
+  * Assert
 * Dev Dependencies and Tools
   * Concurrently
   * Morgan
