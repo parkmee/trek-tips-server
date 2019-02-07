@@ -59,10 +59,57 @@ module.exports = {
   },
   // get user saved places and populate place info
   getUserSavedPlaces: function (req, res) {
-    db.User
-      .findById({ _id: req.params.id })
+    // db.User
+    //   .findById({ _id: req.params.id })
+    //   .populate("isSaved")
+    //   .then(dbUser => res.json(dbUser))
+    //   .catch(err => res.status(422).json(err));
+
+      db.User
+      .find({ _id: req.params.id })
+      .lean()
       .populate("isSaved")
-      .then(dbUser => res.json(dbUser))
+      .populate("hasVisited")
+      .then(dbUser => {
+        //res.json(dbUser);
+        const savedPlaces = dbUser[0].isSaved;
+        const visitedPlaces = dbUser[0].hasVisited;
+        const matchingPlaces = [];
+        const matchingPlacesId = [];
+        const filteredVisitedPlaces = [];
+
+        // creates matchingPlaces array of places that are visited AND saved
+        // will use
+        savedPlaces.forEach(sp => {
+          visitedPlaces.forEach(vp => {
+            if (sp.id === vp.id) {
+              //console.log("match");
+              matchingPlaces.push(vp);
+            }
+          })
+        })
+
+        console.log("mp", matchingPlaces.length);
+        //res.json(matchingPlaces);
+
+        let userStoredPlaces = [];
+
+        matchingPlaces.forEach(place => {
+          userStoredPlaces.push({ place: place, isSaved: true, hasVisited: true })
+        });
+
+        matchingPlaces.forEach(place => {
+          matchingPlacesId.push({ id: place.id });
+        });
+
+        savedPlaces.forEach(place => {
+          if (!matchingPlacesId.includes(place.id)) {
+            userStoredPlaces.push({ place: place, isSaved: true, hasVisited: false });
+          }
+        });
+
+        res.json(userStoredPlaces);
+      })
       .catch(err => res.status(422).json(err));
   },
   // remove user saved place
@@ -108,12 +155,97 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
   // get user visited places and populate place info
+  // getUserVisitedPlaces: function (req, res) {
+  //   db.User
+  //     .findById({ _id: req.params.id })
+  //     .populate("hasVisited")
+  //     .then(dbUser => res.json(dbUser))
+  //     .catch(err => res.status(422).json(err));
+  // },
   getUserVisitedPlaces: function (req, res) {
     db.User
-      .findById({ _id: req.params.id })
+      .find({ _id: req.params.id })
+      .lean()
+      .populate("isSaved")
       .populate("hasVisited")
-      .then(dbUser => res.json(dbUser))
+      .then(dbUser => {
+        //res.json(dbUser);
+        const savedPlaces = dbUser[0].isSaved;
+        const visitedPlaces = dbUser[0].hasVisited;
+        const matchingPlaces = [];
+        const matchingPlacesId = [];
+        const filteredVisitedPlaces = [];
+
+        // creates matchingPlaces array of places that are visited AND saved
+        // will use
+        savedPlaces.forEach(sp => {
+          visitedPlaces.forEach(vp => {
+            if (sp.id === vp.id) {
+              //console.log("match");
+              matchingPlaces.push(vp);
+            }
+          })
+        })
+
+        console.log("mp", matchingPlaces.length);
+        //res.json(matchingPlaces);
+
+        let userStoredPlaces = [];
+
+        matchingPlaces.forEach(place => {
+          userStoredPlaces.push({ place: place, isSaved: true, hasVisited: true })
+        });
+
+        matchingPlaces.forEach(place => {
+          matchingPlacesId.push({ id: place.id });
+        });
+
+        // savedPlaces.forEach(place => {
+        //   if (!matchingPlacesId.includes(place.id)) {
+        //     userStoredPlaces.push({ place: place, isSaved: true, hasVisited: false });
+        //   }
+        // });
+
+        visitedPlaces.forEach(place => {
+          if (!matchingPlacesId.includes(place.id)) {
+            userStoredPlaces.push({ place: place, isSaved: false, hasVisited: true });
+          }
+        });
+
+        res.json(userStoredPlaces);
+      })
       .catch(err => res.status(422).json(err));
+
+
+    // db.User
+    //   .findById({ _id: req.params.id })
+    //   .lean()
+    //   .populate("hasVisited")
+    //   .then(dbUser => {
+    //     for (let i = 0; i < dbUser.hasVisited.length; i++) {
+    //       console.log("setting hasVisited to true for id: ", dbUser.hasVisited[i]._id)
+    //       dbUser.hasVisited[i].hasVisited = true;
+    //       dbUser.hasVisited[i].isSaved = false;
+    //       for (let j = 0; j < dbUser.isSaved.length; j++) {
+    //         console.log("checking isSaved value: '" + dbUser.isSaved[j] + "' = '" + dbUser.hasVisited[i]._id + "'");
+    //         if (dbUser.isSaved[j] === dbUser.hasVisited[i]._id) {
+    //           console.log("setting isSaved to true for id: ", dbUser.hasVisited[i]._id)
+    //           dbUser.hasVisited[i].isSaved = true;
+    //         } else {
+    //           console.log("false")
+    //         }
+    //       }
+    //       // if (dbUser.isSaved.includes(dbUser.hasVisited[i]._id)) {
+    //       //   console.log("setting isSaved to true for id: ", dbUser.hasVisited[i]._id)
+    //       //   dbUser.hasVisited[i].isSaved = true;
+    //       // }
+    //       if (i === dbUser.hasVisited.length -1) {
+    //         console.log("sending response...");
+    //         res.json(dbUser)
+    //       }
+    //     }
+    //   })
+    //   .catch(err => res.status(422).json(err));
   },
   // add user visited place - add to place collection if missing
   addUserVisitedPlace: function (req, res) {
@@ -161,6 +293,7 @@ module.exports = {
 
     db.User
       .find({ _id: req.params.id })
+      .lean()
       .populate("isSaved")
       .populate("hasVisited")
       .then(dbUser => {
@@ -181,25 +314,53 @@ module.exports = {
             }
           })
         })
+
         console.log("mp", matchingPlaces.length);
+        //res.json(matchingPlaces);
+
+        let userStoredPlaces = [];
+
+        matchingPlaces.forEach(place => {
+          userStoredPlaces.push({ place: place, isSaved: true, hasVisited: true })
+        });
+
+        matchingPlaces.forEach(place => {
+          matchingPlacesId.push({ id: place.id });
+        });
+
+        savedPlaces.forEach(place => {
+          if (!matchingPlacesId.includes(place.id)) {
+            userStoredPlaces.push({ place: place, isSaved: true, hasVisited: false });
+          }
+        });
+
+        visitedPlaces.forEach(place => {
+          if (!matchingPlacesId.includes(place.id)) {
+            userStoredPlaces.push({ place: place, isSaved: false, hasVisited: true });
+          }
+        });
+
+        res.json(userStoredPlaces);
+        
+
 
         // ***********************************************************
         // THIS PART ABOVE IS WORKING
         // VARIOUS FAILED TRIES AT REMOVING MATCHED PLACES FROM THE SAVED AND VISITED PLACES 
         // ARRAYS FOLLOW
 
-        /* matchingPlaces.forEach(place => {
-          matchingPlacesId.push({ id: place.id });
-        });
-        console.log("mp id", matchingPlacesId);
+        // matchingPlaces.forEach(place => {
+        //   matchingPlacesId.push({ id: place.id });
+        // });
+        // console.log("mp id", matchingPlacesId);
 
-        matchingPlacesId.forEach(id => {
-          for (let i in savedPlaces) {
-            const filtered = _.differenceBy(savedPlaces[i], id, "id");
-            console.log("filtering");
-          }
-          res.json(filtered);
-        }) */
+        // matchingPlacesId.forEach(id => {
+        //   for (let i in savedPlaces) {
+        //     const filtered = _.differenceBy(savedPlaces[i], id, "id");
+        //     console.log("filtering");
+        //   }
+        //   res.json(filtered);
+        // }) 
         //const filtered = _.differenceBy(savedPlaces, "id")
 
 
