@@ -99,7 +99,7 @@ module.exports = {
         });
 
         matchingPlaces.forEach(place => {
-          matchingPlacesId.push({ id: place.id });
+          matchingPlacesId.push(place.id);
         });
 
         savedPlaces.forEach(place => {
@@ -197,7 +197,7 @@ module.exports = {
         });
 
         matchingPlaces.forEach(place => {
-          matchingPlacesId.push({ id: place.id });
+          matchingPlacesId.push(place.id);
         });
 
         // savedPlaces.forEach(place => {
@@ -325,7 +325,7 @@ module.exports = {
         });
 
         matchingPlaces.forEach(place => {
-          matchingPlacesId.push({ id: place.id });
+          matchingPlacesId.push(place.id);
         });
 
         savedPlaces.forEach(place => {
