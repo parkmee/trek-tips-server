@@ -40,10 +40,11 @@ const seed = new SeedData();
 // seed.seedYelpPlaces(); // dummy place data retrieved from Yelp
 // seed.seedUsers(); // dummy user data from json  
 
-// DO NOT RUN
-// seed.seedPreferences();
+// DO NOT RUN EXCEPT TO SEED MAIN DATABASE ONCE - RUN IN ORDER, ONE AT A TIME
 // seed.convertCSVtoJSON(); // create json file of image links
 // seed.seedImages(); // upload image json file as collection
+// seed.matchImages();
+// seed.addImageToCategory();
 
 // launch server --------------------------------------------------------------
 app.listen(PORT, () => {

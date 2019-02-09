@@ -31,6 +31,7 @@ class SeedData {
       .catch(err => console.log(err));
   }
 
+  // not in use
   seedPreferences() {
     const userArray = [];
     const preferencesArray = [];
@@ -59,48 +60,8 @@ class SeedData {
         })
     })
 
-    /* db.User.find({})
-      .then(users => {
-        console.log(users);
-        users.forEach(user => {
-          userArray.push(user._id);
-        })
-        console.log(userArray);
-        userArray.forEach(userId => {
-          const num1 = Math.floor(Math.random() * preferencesArray.length);
-          const num2 = Math.floor(Math.random() * preferencesArray.length);
-
-          db.User
-            .findOneAndUpdate(
-              userId, 
-              { $push: 
-                { preferences: 
-                  { $each: [preferencesArray[num1], preferencesArray[num2]] }
-                }
-              }
-            )
-            .catch(err => console.log("preference update error: " + err));
-        })
-      })
-      .catch(err => console.log("user fetch error: " + err)); */
-
-    /* db.User.find({})
-      .then(function(users) {
-        //console.log(users);
-        users.forEach(user => {
-          const num1 = Math.floor(Math.random() * preferencesArray.length);
-
-          user.places.push(preferencesArray[num1])
-          console.log(user.places);
-        })
-      }) */
-
-    /* db.User
-      .findByIdAndUpdate(userId, { $push: { preferences: categoryId } }, { new: true })
-      .then(dbUser => res.json(dbUser))
-      .catch(err => res.status(422).json(err)); */
   }
-    
+
   seedYelpPlaces() {
     const categories = "museums";
     const location = "Philadelphia, PA";
@@ -173,11 +134,34 @@ class SeedData {
   seedImages() {
     const images = require("./images.json");
 
-      db.Image
-        .remove({})
-        .then(() => db.Image.collection.insertMany(images))
-        .then(data => { console.log(data.result.n + " records inserted!"); })
-        .catch(err => console.log(err));
+    db.Image
+      .remove({})
+      .then(() => db.Image.collection.insertMany(images))
+      .then(data => { console.log(data.result.n + " records inserted!"); })
+      .catch(err => console.log(err));
+  }
+
+  addImageToCategory() {
+    db.Image
+      .find({})
+      .then(dbImage => {
+        dbImage.forEach(image => {
+          const query = { title: image.category };
+          const update = { image_id: image._id };
+          const options = { new: true };
+
+          db.Category
+            .findOneAndUpdate(query, update, options)
+            .populate("image_id")
+            .catch(err => console.log(err));
+        })
+
+        db.Category
+          .find({})
+          .then(dbCategory => console.log(dbCategory))
+          .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
   }
 }
 
