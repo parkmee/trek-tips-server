@@ -4,6 +4,7 @@ const db = require("../models");
 // 1. alphabetize results - integrate into get, post, and delete requests
 // 2. create list of locations
 // 3. filter places by location - integrate into existing get requests for visited/saved places
+// 4. apply machine learning vector
 // methods for userController
 module.exports = {
   // create user - disable if using Auth0 for login
@@ -278,6 +279,7 @@ getUserVisitedPlaces: function (req, res) {
       })
       .catch(err => res.status(422).json(err));
   },
+  // wip
   getUserLocations: function(req, res) {
     db.User
       .find({ _id: req.params.id })

@@ -7,4 +7,7 @@ router.route('/')
 router.route('/:parentCategory')
   .get(categoryController.getChildCategories);
 
+router.route('/get/:categoryAlias')
+  .get(categoryController.getOneCategory);
+
 module.exports = router;
