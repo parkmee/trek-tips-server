@@ -126,7 +126,7 @@ module.exports = {
   // add user saved place - add to place collection if missing
   addUserSavedPlace: function (req, res) {
     const query1 = { id: req.body.id };
-    const update1 = req.body;
+    const update1 = req.body.placeObject;
     const options1 = { new: true, upsert: true };
 
     db.Place
@@ -216,47 +216,17 @@ module.exports = {
       })
       .catch(err => res.status(422).json(err));
 
-
-    // db.User
-    //   .findById({ _id: req.params.id })
-    //   .lean()
-    //   .populate("hasVisited")
-    //   .then(dbUser => {
-    //     for (let i = 0; i < dbUser.hasVisited.length; i++) {
-    //       console.log("setting hasVisited to true for id: ", dbUser.hasVisited[i]._id)
-    //       dbUser.hasVisited[i].hasVisited = true;
-    //       dbUser.hasVisited[i].isSaved = false;
-    //       for (let j = 0; j < dbUser.isSaved.length; j++) {
-    //         console.log("checking isSaved value: '" + dbUser.isSaved[j] + "' = '" + dbUser.hasVisited[i]._id + "'");
-    //         if (dbUser.isSaved[j] === dbUser.hasVisited[i]._id) {
-    //           console.log("setting isSaved to true for id: ", dbUser.hasVisited[i]._id)
-    //           dbUser.hasVisited[i].isSaved = true;
-    //         } else {
-    //           console.log("false")
-    //         }
-    //       }
-    //       // if (dbUser.isSaved.includes(dbUser.hasVisited[i]._id)) {
-    //       //   console.log("setting isSaved to true for id: ", dbUser.hasVisited[i]._id)
-    //       //   dbUser.hasVisited[i].isSaved = true;
-    //       // }
-    //       if (i === dbUser.hasVisited.length -1) {
-    //         console.log("sending response...");
-    //         res.json(dbUser)
-    //       }
-    //     }
-    //   })
-    //   .catch(err => res.status(422).json(err));
   },
   // add user visited place - add to place collection if missing
   addUserVisitedPlace: function (req, res) {
     const query1 = { id: req.body.id };
-    const update1 = req.body;
+    const update1 = req.body.placeObject;
     const options1 = { new: true, upsert: true };
+    console.log(req.body.placeObject);
 
     db.Place
       .findOneAndUpdate(query1, { $set: update1 }, options1)
       .then(dbPlace => {
-        console.log(dbPlace);
         const query2 = { _id: req.params.id };
         const update2 = { hasVisited: dbPlace._id };
         const options2 = { new: true };
@@ -315,9 +285,6 @@ module.exports = {
           })
         })
 
-        console.log("mp", matchingPlaces.length);
-        //res.json(matchingPlaces);
-
         let userStoredPlaces = [];
 
         matchingPlaces.forEach(place => {
@@ -341,91 +308,6 @@ module.exports = {
         });
 
         res.json(userStoredPlaces);
-        
-
-
-        // ***********************************************************
-        // THIS PART ABOVE IS WORKING
-        // VARIOUS FAILED TRIES AT REMOVING MATCHED PLACES FROM THE SAVED AND VISITED PLACES 
-        // ARRAYS FOLLOW
-
-        // matchingPlaces.forEach(place => {
-        //   matchingPlacesId.push({ id: place.id });
-        // });
-        // console.log("mp id", matchingPlacesId);
-
-        // matchingPlacesId.forEach(id => {
-        //   for (let i in savedPlaces) {
-        //     const filtered = _.differenceBy(savedPlaces[i], id, "id");
-        //     console.log("filtering");
-        //   }
-        //   res.json(filtered);
-        // }) 
-        //const filtered = _.differenceBy(savedPlaces, "id")
-
-
-        /* const filteredSavedPlaces = savedPlaces.filter(el => {
-          return el.
-        }) */
-        /*  const filteredSavedPlaces = savedPlaces.map(sp => {
-          console.log("check 1");
-           console.log(sp.id, "*****************************");
-          matchingPlaces.forEach(mp => {
-            console.log(mp.id);
-            if (sp.id === mp.id) {
-              console.log("Match");
-            } else {
-              console.log(sp);
-              return sp;
-            }
-          })
-        })
-        console.log(filteredSavedPlaces.length);
-        console.log("hi");
-         res.json(filteredSavedPlaces); */
-
-
-        //console.log("mp", matchingPlaces.length);
-
-
-        /* // created array of just the ids of matching places
-        matchingPlaces.forEach(place => {
-          matchingPlacesId.push({ id: place.id });
-        });
-
-        //const matchingPlacesId = matchingPlaces.map(place => place.id );
-        console.log(matchingPlacesId)
-
-        // NEED HELP FILTERING savedPlaces and visitedPlaces against matchingPlaces
-        const filteredSavedPlaces = [];
-        
-          const filter = _.map(savedPlaces, val => {
-
-          }) */
-        /* 
-                console.log(filteredSavedPlaces.length);
-                console.log('hello');
-                // HELP ABOVE THIS LINE
-        
-                const userStoredPlaces = [];
-         */
-        // ********************************************************************
-        // THIS PART BELOW IS TESTED AND WORKED FINE
-        // savedPlaces and visitedPlaces to be exchanged for their filtered versions
-        // containing only unique values to each
-
-        /* savedPlaces.forEach(place => {
-          userStoredPlaces.push({ place: place, isSaved: true });
-        });
-        visitedPlaces.forEach(place => {
-          userStoredPlaces.push({ place: place, hasVisited: true });
-        });*/
-
-        /* matchingPlaces.forEach(place => {
-          userStoredPlaces.push({ place: place, isSaved: true, hasVisited: true })
-        });
-        console.log(userStoredPlaces);
-        res.json(userStoredPlaces); */
       })
       .catch(err => res.status(422).json(err));
 
