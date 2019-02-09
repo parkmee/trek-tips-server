@@ -1,6 +1,9 @@
 const db = require("../models");
-const differenceBy = require("lodash.differenceby");
 
+// TODO: 
+// 1. alphabetize results - integrate into get, post, and delete requests
+// 2. create list of locations
+// 3. filter places by location - integrate into existing get requests for visited/saved places
 // methods for userController
 module.exports = {
   // create user - disable if using Auth0 for login
@@ -59,40 +62,26 @@ module.exports = {
   },
   // get user saved places and populate place info
   getUserSavedPlaces: function (req, res) {
-    // db.User
-    //   .findById({ _id: req.params.id })
-    //   .populate("isSaved")
-    //   .then(dbUser => res.json(dbUser))
-    //   .catch(err => res.status(422).json(err));
-
       db.User
       .find({ _id: req.params.id })
       .lean()
       .populate("isSaved")
       .populate("hasVisited")
       .then(dbUser => {
-        //res.json(dbUser);
         const savedPlaces = dbUser[0].isSaved;
         const visitedPlaces = dbUser[0].hasVisited;
         const matchingPlaces = [];
         const matchingPlacesId = [];
-        const filteredVisitedPlaces = [];
 
         // creates matchingPlaces array of places that are visited AND saved
-        // will use
         savedPlaces.forEach(sp => {
           visitedPlaces.forEach(vp => {
             if (sp.id === vp.id) {
-              //console.log("match");
               matchingPlaces.push(vp);
             }
           })
         })
-
-        console.log("mp", matchingPlaces.length);
-        //res.json(matchingPlaces);
-
-        let userStoredPlaces = [];
+        const userStoredPlaces = [];
 
         matchingPlaces.forEach(place => {
           userStoredPlaces.push({ place: place, isSaved: true, hasVisited: true })
@@ -154,43 +143,28 @@ module.exports = {
       })
       .catch(err => res.status(422).json(err));
   },
-  // get user visited places and populate place info
-  // getUserVisitedPlaces: function (req, res) {
-  //   db.User
-  //     .findById({ _id: req.params.id })
-  //     .populate("hasVisited")
-  //     .then(dbUser => res.json(dbUser))
-  //     .catch(err => res.status(422).json(err));
-  // },
-  getUserVisitedPlaces: function (req, res) {
+getUserVisitedPlaces: function (req, res) {
     db.User
       .find({ _id: req.params.id })
       .lean()
       .populate("isSaved")
       .populate("hasVisited")
       .then(dbUser => {
-        //res.json(dbUser);
         const savedPlaces = dbUser[0].isSaved;
         const visitedPlaces = dbUser[0].hasVisited;
         const matchingPlaces = [];
         const matchingPlacesId = [];
-        const filteredVisitedPlaces = [];
 
         // creates matchingPlaces array of places that are visited AND saved
-        // will use
         savedPlaces.forEach(sp => {
           visitedPlaces.forEach(vp => {
             if (sp.id === vp.id) {
-              //console.log("match");
               matchingPlaces.push(vp);
             }
           })
         })
 
-        console.log("mp", matchingPlaces.length);
-        //res.json(matchingPlaces);
-
-        let userStoredPlaces = [];
+        const userStoredPlaces = [];
 
         matchingPlaces.forEach(place => {
           userStoredPlaces.push({ place: place, isSaved: true, hasVisited: true })
@@ -199,12 +173,6 @@ module.exports = {
         matchingPlaces.forEach(place => {
           matchingPlacesId.push(place.id);
         });
-
-        // savedPlaces.forEach(place => {
-        //   if (!matchingPlacesId.includes(place.id)) {
-        //     userStoredPlaces.push({ place: place, isSaved: true, hasVisited: false });
-        //   }
-        // });
 
         visitedPlaces.forEach(place => {
           if (!matchingPlacesId.includes(place.id)) {
@@ -215,7 +183,6 @@ module.exports = {
         res.json(userStoredPlaces);
       })
       .catch(err => res.status(422).json(err));
-
   },
   // add user visited place - add to place collection if missing
   addUserVisitedPlace: function (req, res) {
@@ -267,25 +234,21 @@ module.exports = {
       .populate("isSaved")
       .populate("hasVisited")
       .then(dbUser => {
-        //res.json(dbUser);
         const savedPlaces = dbUser[0].isSaved;
         const visitedPlaces = dbUser[0].hasVisited;
         const matchingPlaces = [];
         const matchingPlacesId = [];
-        const filteredVisitedPlaces = [];
 
         // creates matchingPlaces array of places that are visited AND saved
-        // will use
         savedPlaces.forEach(sp => {
           visitedPlaces.forEach(vp => {
             if (sp.id === vp.id) {
-              //console.log("match");
               matchingPlaces.push(vp);
             }
           })
         })
 
-        let userStoredPlaces = [];
+        const userStoredPlaces = [];
 
         matchingPlaces.forEach(place => {
           userStoredPlaces.push({ place: place, isSaved: true, hasVisited: true })
@@ -310,6 +273,20 @@ module.exports = {
         res.json(userStoredPlaces);
       })
       .catch(err => res.status(422).json(err));
+  },
+  getUserLocations: function(req, res) {
+    db.User
+      .find({ _id: req.params.id })
+      .lean()
+      .populate("isSaved")
+      .populate("hasVisited")
+      .then(dbUser => {
+        const savedPlaces = dbUser[0].isSaved;
+        const visitedPlaces = dbUser[0].hasVisited;
 
-  }
+        savedPlaces.forEach(place => {
+          console.log(place.id);
+        })
+      })
+  },
 };

@@ -38,29 +38,22 @@ module.exports = {
       .populate("isSaved")
       .populate("hasVisited")
       .then(dbUser => {
-        //res.json(dbUser);
         const savedPlaces = dbUser[0].isSaved;
         const visitedPlaces = dbUser[0].hasVisited;
         const matchingPlaces = [];
         const matchingPlacesId = [];
+        const savedPlaceIds = [];
+        const visitedPlaceIds = [];
         const filteredVisitedPlaces = [];
 
         // creates matchingPlaces array of places that are visited AND saved
-        // will use
         savedPlaces.forEach(sp => {
           visitedPlaces.forEach(vp => {
             if (sp.id === vp.id) {
-              //console.log("match");
               matchingPlaces.push(vp);
             }
           })
         })
-
-        let userStoredPlaces = [];
-
-        matchingPlaces.forEach(place => {
-          userStoredPlaces.push({ place: place, isSaved: true, hasVisited: true })
-        });
 
         matchingPlaces.forEach(place => {
           matchingPlacesId.push(place.id);
@@ -68,23 +61,34 @@ module.exports = {
 
         savedPlaces.forEach(place => {
           if (!matchingPlacesId.includes(place.id)) {
-            userStoredPlaces.push({ place: place, isSaved: true, hasVisited: false });
+            savedPlaceIds.push(place.id);
           }
         });
 
         visitedPlaces.forEach(place => {
           if (!matchingPlacesId.includes(place.id)) {
-            userStoredPlaces.push({ place: place, isSaved: false, hasVisited: true });
+            visitedPlaceIds.push(place.id);
           }
         });
 
+        const recommmendationsArray = [];
         recommendations.data.businesses.forEach(place => {
-          if (!matchingPlacesId.includes(place.id)) {
-            userStoredPlaces.push({ place: place, isSaved: false, hasVisited: false });
+          if (matchingPlacesId.includes(place.id)) {
+            recommmendationsArray.push({ place: place, isSaved: true, hasVisited: true })
+            console.log("id:" + place.id + " name: " + place.name + " isSaved: true hasVisited: true");
+          } else if (savedPlaceIds.includes(place.id)) {
+            recommmendationsArray.push({ place: place, isSaved: true, hasVisited: false })
+            console.log("id:" + place.id + " name: " + place.name + " isSaved: true hasVisited: false");
+          } else if (visitedPlaceIds.includes(place.id)) {
+            recommmendationsArray.push({ place: place, isSaved: false, hasVisited: true })
+            console.log("id:" + place.id + " name: " + place.name + " isSaved: false hasVisited: true");
+          } else {
+            recommmendationsArray.push({ place: place, isSaved: false, hasVisited: false })
+            console.log("id:" + place.id + " name: " + place.name + " isSaved: false hasVisited: false");
           }
-        })
+        });
 
-        res.json(userStoredPlaces);
+        res.json(recommmendationsArray);
       
       })
       .catch(err => res.status(422).json(err));
