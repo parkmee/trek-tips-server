@@ -1,8 +1,8 @@
 const db = require("../models");
 
+// TODO: filter categories by those with populated images
 module.exports = {
   // get all parent category: arts, active, restaurants, nightlife, food, shopping, etc
-
   getParentCategories: function (req, res) {
     db.Category
       .find({ "parent_aliases.0": { "$exists": false } })
