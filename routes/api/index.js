@@ -7,7 +7,7 @@ const preferencesRoute = require('./category');
 
 router.use('/tips', tipsRoute);
 router.use('/user', userRoute);
-router.use('/recommendations', yelpRoute);
+router.use('/user/:id/recommendations', yelpRoute);
 router.use('/place', placeRoute);
 router.use('/preferences', preferencesRoute);
 
