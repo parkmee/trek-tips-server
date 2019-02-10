@@ -116,7 +116,7 @@ module.exports = {
   // add user saved place - add to place collection if missing
   addUserSavedPlace: function (req, res) {
     const query1 = { id: req.body.id };
-    const update1 = req.body.placeObject;
+    const update1 = req.body;
     const options1 = { new: true, upsert: true };
 
     db.Place
