@@ -25,14 +25,14 @@ router.route('/:id/places/saved')
   .get(userController.getUserSavedPlaces)
   .post(userController.addUserSavedPlace);
 
-router.route('/:id/places/saved/:place_id')
+router.route('/:id/places/saved/:yelp_id')
   .delete(userController.removeUserSavedPlace);
 
 router.route('/:id/places/visited')
   .get(userController.getUserVisitedPlaces)
   .post(userController.addUserVisitedPlace);
 
-router.route('/:id/places/visited/:place_id')
+router.route('/:id/places/visited/:yelp_id')
   .delete(userController.removeUserVisitedPlace);
 
 module.exports = router;

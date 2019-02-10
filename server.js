@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 
 // Dev Dependencies -----------------------------------------------------------
 //const logger = require('morgan');
-const morganBody = require('morgan-body'); // added by Mike
+//const morganBody = require('morgan-body'); // added by Mike
 
 // Connect to MongoDB Database ------------------------------------------------
 const mongoose = require('mongoose');
@@ -28,7 +28,7 @@ const PORT = process.env.PORT || 8000;
 //app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-morganBody(app, {maxBodyLength: 10000});  // added by Mike
+//morganBody(app, {maxBodyLength: 10000});  // added by Mike
 
 // Routes ---------------------------------------------------------------------
 app.use('/', routes);

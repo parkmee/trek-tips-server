@@ -114,7 +114,7 @@ module.exports = {
     // .catch(err => res.status(422).json(err));
 
     db.Place
-      .findOne({id: req.params.place_id})
+      .findOne({ id: req.params.yelp_id })
       .then(dbPlace => {
         db.User
             .findOneAndUpdate({ _id: req.params.id }, { $pull: { isSaved: dbPlace._id } }, { new: true })
@@ -237,7 +237,7 @@ getUserVisitedPlaces: function (req, res) {
     //   .catch(err => res.status(422).json(err));
 
       db.Place
-      .findOne({id: req.params.place_id})
+      .findOne({id: req.params.yelp_id})
       .then(dbPlace => {
         db.User
             .findOneAndUpdate({ _id: req.params.id }, { $pull: { hasVisited: dbPlace._id } }, { new: true })
