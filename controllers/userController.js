@@ -188,9 +188,8 @@ getUserVisitedPlaces: function (req, res) {
   // add user visited place - add to place collection if missing
   addUserVisitedPlace: function (req, res) {
     const query1 = { id: req.body.id };
-    const update1 = req.body.placeObject;
+    const update1 = req.body;
     const options1 = { new: true, upsert: true };
-    console.log(req.body.placeObject);
 
     db.Place
       .findOneAndUpdate(query1, { $set: update1 }, options1)
