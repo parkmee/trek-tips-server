@@ -32,51 +32,66 @@ module.exports = {
         'Access-Control-Allow-Headers': 'Origin'
       }
     }).then(recommendations => {
-      for (let i = 0; i < recommendations.data.businesses.length; i++) {
-        console.log("setting isSaved to false for yelpId: ", recommendations.data.businesses[i].id)
-        recommendations.data.businesses[i].isSaved = false;
-        console.log("setting hasVisited to false for yelpId: ", recommendations.data.businesses[i].id)
-        recommendations.data.businesses[i].hasVisited = false;
+      db.User
+      .find({ _id: req.body.id })
+      .lean()
+      .populate("isSaved")
+      .populate("hasVisited")
+      .then(dbUser => {
+        const savedPlaces = dbUser[0].isSaved;
+        const visitedPlaces = dbUser[0].hasVisited;
+        const matchingPlaces = [];
+        const matchingPlacesId = [];
+        const savedPlaceIds = [];
+        const visitedPlaceIds = [];
+        const filteredVisitedPlaces = [];
 
-        db.User
-          .findOne({ _id: userId})
-          .populate("hasVisited")
-          .catch(err => {
-            // dunno why but catch needs to be first here or it doesn't work right!
-            res.json(recommendations.data); 
-          })
-          .then(result => {
-            if (result) {
-              for (let j = 0; j < result.hasVisited.length; j++) {
-                if (result.hasVisited[j].id === recommendations.data.businesses[i].id) {
-                  recommendations.data.businesses[i].hasVisited = true
-                }
-              }
-            } 
-          })
-
-        db.User
-          .findOne({ _id: userId})
-          .populate("isSaved")
-          .catch(err => {
-            // dunno why but catch needs to be first here or it doesn't work right!
-            console.log("err>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", err);
-            res.json(recommendations.data); 
-          })
-          .then(result => {
-            if (result) {
-              for (let j = 0; j < result.isSaved.length; j++) {
-                if (result.isSaved[j].id === recommendations.data.businesses[i].id) {
-                  recommendations.data.businesses[i].isSaved = true
-                }   
-              }
-            } 
-            if (i === recommendations.data.businesses.length - 1) {
-              console.log("sending response...");
-              res.json(recommendations.data); 
+        // creates matchingPlaces array of places that are visited AND saved
+        savedPlaces.forEach(sp => {
+          visitedPlaces.forEach(vp => {
+            if (sp.id === vp.id) {
+              matchingPlaces.push(vp);
             }
           })
-      }
+        })
+
+        matchingPlaces.forEach(place => {
+          matchingPlacesId.push(place.id);
+        });
+
+        savedPlaces.forEach(place => {
+          if (!matchingPlacesId.includes(place.id)) {
+            savedPlaceIds.push(place.id);
+          }
+        });
+
+        visitedPlaces.forEach(place => {
+          if (!matchingPlacesId.includes(place.id)) {
+            visitedPlaceIds.push(place.id);
+          }
+        });
+
+        const recommmendationsArray = [];
+        recommendations.data.businesses.forEach(place => {
+          if (matchingPlacesId.includes(place.id)) {
+            recommmendationsArray.push({ place: place, isSaved: true, hasVisited: true })
+            console.log("id:" + place.id + " name: " + place.name + " isSaved: true hasVisited: true");
+          } else if (savedPlaceIds.includes(place.id)) {
+            recommmendationsArray.push({ place: place, isSaved: true, hasVisited: false })
+            console.log("id:" + place.id + " name: " + place.name + " isSaved: true hasVisited: false");
+          } else if (visitedPlaceIds.includes(place.id)) {
+            recommmendationsArray.push({ place: place, isSaved: false, hasVisited: true })
+            console.log("id:" + place.id + " name: " + place.name + " isSaved: false hasVisited: true");
+          } else {
+            recommmendationsArray.push({ place: place, isSaved: false, hasVisited: false })
+            console.log("id:" + place.id + " name: " + place.name + " isSaved: false hasVisited: false");
+          }
+        });
+
+        res.json(recommmendationsArray);
+      
+      })
+      .catch(err => res.status(422).json(err));
     })
     .catch(err => {
       console.log(err);

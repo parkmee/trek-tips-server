@@ -89,7 +89,6 @@ module.exports = {
         });
 
         matchingPlaces.forEach(place => {
-          //matchingPlacesId.push({ id: place.id });
           matchingPlacesId.push(place.id);
         });
 
@@ -173,7 +172,6 @@ getUserVisitedPlaces: function (req, res) {
         });
 
         matchingPlaces.forEach(place => {
-          // matchingPlacesId.push({ id: place.id });
           matchingPlacesId.push(place.id);
         });
 
@@ -196,7 +194,6 @@ getUserVisitedPlaces: function (req, res) {
     db.Place
       .findOneAndUpdate(query1, { $set: update1 }, options1)
       .then(dbPlace => {
-        console.log(dbPlace);
         const query2 = { _id: req.params.id };
         const update2 = { hasVisited: dbPlace._id };
         const options2 = { new: true };
@@ -258,7 +255,6 @@ getUserVisitedPlaces: function (req, res) {
         });
 
         matchingPlaces.forEach(place => {
-          //matchingPlacesId.push({ id: place.id });
           matchingPlacesId.push(place.id);
         });
 
@@ -275,7 +271,6 @@ getUserVisitedPlaces: function (req, res) {
         });
 
         res.json(userStoredPlaces);
-
       })
       .catch(err => res.status(422).json(err));
   },
