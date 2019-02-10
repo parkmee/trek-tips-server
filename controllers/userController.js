@@ -104,13 +104,23 @@ module.exports = {
   },
   // remove user saved place
   removeUserSavedPlace: function (req, res) {
-    const query = { _id: req.params.id };
-    const update = { isSaved: req.params.place_id };
-    const options = { new: true };
+    // const query = { _id: req.params.id };
+    // const update = { isSaved: req.params.place_id };
+    // const options = { new: true };
 
-    db.User
-      .findOneAndUpdate(query, { $pull: update }, options)
-      .then(dbUser => res.json(dbUser))
+    // db.User
+    // .findOneAndUpdate(query, { $pull: update }, options)
+    // .then(dbUser => res.json(dbUser))
+    // .catch(err => res.status(422).json(err));
+
+    db.Place
+      .findOne({id: req.params.place_id})
+      .then(dbPlace => {
+        db.User
+            .findOneAndUpdate({ _id: req.params.id }, { $pull: { isSaved: dbPlace._id } }, { new: true })
+            .then(dbUser => res.json(dbUser))
+            .catch(err => res.status(422).json(err));
+      })
       .catch(err => res.status(422).json(err));
   },
   // add user saved place - add to place collection if missing
@@ -217,13 +227,23 @@ getUserVisitedPlaces: function (req, res) {
   },
   // remove user visited place
   removeUserVisitedPlace: function (req, res) {
-    const query = { _id: req.params.id };
-    const update = { hasVisited: req.params.place_id };
-    const options = { new: true };
+    // const query = { _id: req.params.id };
+    // const update = { hasVisited: req.params.place_id };
+    // const options = { new: true };
 
-    db.User
-      .findOneAndUpdate(query, { $pull: update }, options)
-      .then(dbUser => res.json(dbUser))
+    // db.User
+    //   .findOneAndUpdate(query, { $pull: update }, options)
+    //   .then(dbUser => res.json(dbUser))
+    //   .catch(err => res.status(422).json(err));
+
+      db.Place
+      .findOne({id: req.params.place_id})
+      .then(dbPlace => {
+        db.User
+            .findOneAndUpdate({ _id: req.params.id }, { $pull: { hasVisited: dbPlace._id } }, { new: true })
+            .then(dbUser => res.json(dbUser))
+            .catch(err => res.status(422).json(err));
+      })
       .catch(err => res.status(422).json(err));
   },
   getAllUserPlaces: function (req, res) {
